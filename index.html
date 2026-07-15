@@ -1,17 +1,19 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CATADOS FC — Loja Oficial</title>
+<link rel="icon" type="image/png" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 
   /* ============================================
      PONTOS PARA VOCÊ EDITAR:
-     1. Links do Google Forms -> procure por FORM_LINK_AQUI
+     1. Configuração do formulário -> procure por CONFIG DO FORMULÁRIO (no final do arquivo, dentro de <script>)
+        Um único Google Forms atende os 3 produtos: o campo "Produto" já
+        chega pré-selecionado, e "Tamanho" só aparece pedido quando for camisa.
      2. Imagens dos produtos  -> procure por IMAGEM: placeholders SVG (troque por <img> quando tiver fotos)
      3. Preços e nomes dos produtos -> dentro de cada <article class="card">
      ============================================ */
@@ -63,15 +65,14 @@
   }
 
   .crest{
-    width:34px; height:34px;
-    border: 2px solid var(--vermelho);
-    border-radius: 6px 6px 16px 16px;
-    display:flex; align-items:center; justify-content:center;
-    font-family: var(--font-display);
-    font-weight:700;
-    font-size: 14px;
-    color: var(--vermelho);
+    width:38px; height:38px;
     flex-shrink:0;
+  }
+
+  .crest img{
+    width:100%;
+    height:100%;
+    object-fit: contain;
   }
 
   .brand-name{
@@ -117,18 +118,17 @@
   }
 
   .hero-crest{
-    width:88px; height:88px;
+    width:150px; height:150px;
     margin: 0 auto 22px;
-    border: 3px solid var(--vermelho);
-    border-radius: 14px 14px 40px 40px;
-    display:flex; align-items:center; justify-content:center;
-    font-family: var(--font-display);
-    font-weight:700;
-    font-size: 30px;
-    color: var(--osso);
-    background: linear-gradient(180deg, var(--preto-card) 0%, var(--preto) 100%);
     position: relative;
     z-index:1;
+  }
+
+  .hero-crest img{
+    width:100%;
+    height:100%;
+    object-fit: contain;
+    filter: drop-shadow(0 8px 24px rgba(200,16,46,0.35));
   }
 
   .hero h1{
@@ -298,6 +298,14 @@
 
   .btn:hover{ background: var(--vermelho); }
 
+  .btn.desabilitado{
+    background: var(--preto-card-borda);
+    border-color: var(--preto-card-borda);
+    color: var(--cinza);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
   /* ---------- RODAPÉ ---------- */
   footer{
     border-top: 1px solid var(--preto-card-borda);
@@ -338,14 +346,14 @@
 
   <div class="topbar">
     <div class="brand">
-      <div class="crest">CF</div>
+      <div class="crest"><img src="logo.png" alt="Escudo Catados FC"></div>
       <div class="brand-name">Catados <span>FC</span></div>
     </div>
     <div class="topbar-tag">Loja Oficial</div>
   </div>
 
   <section class="hero">
-    <div class="hero-crest">CF</div>
+    <div class="hero-crest"><img src="logo.png" alt="Escudo oficial Catados Shop"></div>
     <h1>Catados<span class="accent">.</span>Shop</h1>
     <p class="hero-sub">Produtos oficiais do Catados FC</p>
     <div class="hero-line"></div>
@@ -370,7 +378,7 @@
           <div class="card-desc">Manto titular do Catados FC, tecido esportivo, escudo bordado.</div>
           <div class="card-rodape">
             <div class="preco">R$ 149<span>à vista</span></div>
-            <a class="btn" href="FORM_LINK_AQUI_CAMISA" target="_blank" rel="noopener">Fazer pedido</a>
+            <a class="btn" data-produto="Camisa Oficial" target="_blank" rel="noopener">Fazer pedido</a>
           </div>
         </div>
       </article>
@@ -392,7 +400,7 @@
           <div class="card-desc">Aba curva, escudo bordado frontal, ajuste regulável.</div>
           <div class="card-rodape">
             <div class="preco">R$ 69<span>à vista</span></div>
-            <a class="btn" href="FORM_LINK_AQUI_BONE" target="_blank" rel="noopener">Fazer pedido</a>
+            <a class="btn" data-produto="Boné Oficial" target="_blank" rel="noopener">Fazer pedido</a>
           </div>
         </div>
       </article>
@@ -412,7 +420,7 @@
           <div class="card-desc">Tote bag resistente, escudo estampado, alça reforçada.</div>
           <div class="card-rodape">
             <div class="preco">R$ 59<span>à vista</span></div>
-            <a class="btn" href="FORM_LINK_AQUI_BOLSA" target="_blank" rel="noopener">Fazer pedido</a>
+            <a class="btn" data-produto="Bolsa Oficial" target="_blank" rel="noopener">Fazer pedido</a>
           </div>
         </div>
       </article>
@@ -423,6 +431,82 @@
   <footer>
     <p><span class="rodape-crest">CATADOS FC</span> — Loja Oficial · Pedidos via formulário · © 2026</p>
   </footer>
+
+  <script>
+    /* ============================================
+       CONFIG DO FORMULÁRIO — edite só esta parte
+       ============================================
+
+       Como pegar os valores abaixo, no Google Forms:
+
+       1. Crie UM formulário só, com estes campos (nesta ordem sugerida):
+            - Nome completo            (resposta curta)
+            - WhatsApp                 (resposta curta)
+            - Produto                  (múltipla escolha: Camisa Oficial / Boné Oficial / Bolsa Oficial)
+            - Tamanho                  (múltipla escolha: P / M / G / GG)
+            - Quantidade                (resposta curta ou múltipla escolha)
+
+       2. No formulário publicado, clique nos 3 pontinhos (⋮) no canto
+          superior direito -> "Copiar Link" (ou "Obter link pré-preenchido").
+
+       3. Para pegar o ID de um campo específico (ex: "Produto"):
+            - Abra o formulário como se fosse responder
+            - Clique nos 3 pontinhos -> "Obter link pré-preenchido"
+            - Preencha o campo "Produto" com um valor de teste e clique em "Obter link"
+            - Copie o link gerado: ele vai ter algo como
+              ...forms.gle/xxxx?entry.123456789=valor+de+teste
+            - O número depois de "entry." é o ID daquele campo. Copie e cole
+              abaixo em FORM_ENTRY_PRODUTO. Repita o processo para o campo
+              "Tamanho" e preencha FORM_ENTRY_TAMANHO.
+
+       4. Copie o link BASE do formulário (sem os parâmetros de entry.)
+          para FORM_BASE_URL — normalmente termina em "/viewform".
+    */
+
+    const FORM_CONFIG = {
+      // Link base do formulário, terminando em /viewform
+      FORM_BASE_URL: "FORM_LINK_AQUI",
+
+      // IDs dos campos (ex: "123456789") — deixe "" se ainda não tiver
+      FORM_ENTRY_PRODUTO: "",
+      FORM_ENTRY_TAMANHO: "",
+
+      // Produtos que devem pedir tamanho no formulário
+      PRODUTOS_COM_TAMANHO: ["Camisa Oficial"]
+    };
+
+    function montarLinkFormulario(produto) {
+      const base = FORM_CONFIG.FORM_BASE_URL;
+      if (!base || base === "FORM_LINK_AQUI") return null;
+
+      const params = new URLSearchParams();
+      if (FORM_CONFIG.FORM_ENTRY_PRODUTO) {
+        params.set(`entry.${FORM_CONFIG.FORM_ENTRY_PRODUTO}`, produto);
+      }
+      // O campo Tamanho fica em branco no link (o torcedor escolhe no
+      // formulário), mas se quiser travar um valor padrão dá pra usar
+      // FORM_CONFIG.FORM_ENTRY_TAMANHO da mesma forma acima.
+
+      const separador = base.includes("?") ? "&" : "?";
+      return params.toString() ? `${base}${separador}${params.toString()}` : base;
+    }
+
+    document.querySelectorAll(".btn[data-produto]").forEach((botao) => {
+      const produto = botao.getAttribute("data-produto");
+      const link = montarLinkFormulario(produto);
+
+      if (link) {
+        botao.href = link;
+      } else {
+        // Formulário ainda não configurado: botão fica visível mas inerte,
+        // pra não gerar um link quebrado sem querer.
+        botao.classList.add("desabilitado");
+        botao.removeAttribute("target");
+        botao.setAttribute("aria-disabled", "true");
+        botao.title = "Formulário de pedidos ainda não configurado";
+      }
+    });
+  </script>
 
 </body>
 </html>
