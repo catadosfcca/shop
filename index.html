@@ -14,7 +14,10 @@
      1. Configuração do formulário -> procure por CONFIG DO FORMULÁRIO (no final do arquivo, dentro de <script>)
         Um único Google Forms atende os 3 produtos: o campo "Produto" já
         chega pré-selecionado, e "Tamanho" só aparece pedido quando for camisa.
-     2. Imagens dos produtos  -> procure por IMAGEM: placeholders SVG (troque por <img> quando tiver fotos)
+     2. Imagens dos produtos  -> arquivos .jpg na mesma pasta do index.html
+        (camisa-2-azul.jpg, bone-trucker.jpg, porta-chuteira.jpg, bolsa.jpg).
+        O prompt usado para gerar cada foto está documentado em comentário
+        logo acima de cada <img>, dentro do <article class="card">.
      3. Preços e nomes dos produtos -> dentro de cada <article class="card">
      ============================================ */
 
@@ -118,7 +121,7 @@
   }
 
   .hero-crest{
-    width:200px; height:200px;
+    width:300px; height:300px;
     margin: 0 auto 22px;
     position: relative;
     z-index:1;
@@ -210,6 +213,16 @@
     transform: translateY(-4px);
   }
 
+  .card.indisponivel{
+    opacity: 0.6;
+    filter: grayscale(0.5);
+  }
+
+  .card.indisponivel:hover{
+    border-color: var(--preto-card-borda);
+    transform: none;
+  }
+
   .card-media{
     position:relative;
     aspect-ratio: 1 / 1;
@@ -233,6 +246,28 @@
   }
 
   .numero b{ color: var(--vermelho); font-size: 15px; }
+
+  .badge-em-breve{
+    position:absolute;
+    top:12px; right:14px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight:700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--osso);
+    background: var(--vermelho-escuro);
+    border: 1px solid var(--vermelho);
+    padding: 4px 8px;
+    border-radius: 3px;
+  }
+
+  /* Foto real do produto, preenchendo todo o card-media */
+  .card-foto{
+    width:100%;
+    height:100%;
+    object-fit: cover;
+  }
 
   /* IMAGEM: placeholder SVG — troque o <svg> por <img src="sua-foto.jpg" alt="..."> quando tiver as fotos reais */
   .icone{ width: 96px; height: 96px; }
@@ -364,63 +399,138 @@
 
     <div class="grid">
 
-      <!-- ============ PRODUTO 1: CAMISA ============ -->
+      <!-- ============ PRODUTO 1: CAMISA 2 AZUL ============ -->
       <article class="card">
         <div class="card-media">
           <span class="numero">Nº <b>10</b></span>
-          <!-- IMAGEM: troque este SVG por <img src="camisa.jpg" alt="Camisa oficial Catados FCCA"> -->
-          <svg class="icone" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="1.4">
-            <path d="M8 3l4 2 4-2 4 3-2.5 3L16 8v11a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V8l-1.5 1L4 6l4-3z"/>
-          </svg>
+          <img class="card-foto" src="camisa-2-azul.jpg" alt="Camisa 2 Azul ENERG Oficial Catados FCCA">
+          <!--
+            PROMPT USADO PARA GERAR ESTA FOTO (mockup de produto, mesmo
+            estilo do escudo/logo do time — reaproveite este padrão pra
+            gerar fotos de novos produtos no futuro):
+
+            "Product mockup photo of a football/soccer jersey, dark navy
+            blue with diagonal lightning-bolt stripe pattern in a slightly
+            lighter blue tone, 'energ' sponsor wordmark centered on chest
+            in white with an orange accent dash, club crest patch on the
+            upper right chest (shield badge with a cartoon mascot: bald
+            bearded man holding a beer mug and a skewer, red-and-white
+            striped jersey background, banner with a founding date),
+            matching smaller crest patch on the left sleeve, sponsor
+            wordmark on the right sleeve cuff, blue-and-orange lightning
+            pattern trim on collar and sleeve cuffs, small manufacturer
+            wing logo on chest, 'DRY-PREMIUM' and product tag details on
+            hem, photographed flat/ghost-mannequin style facing forward,
+            centered composition, pure black background with a subtle
+            dark red glow/vignette around the product, studio product
+            photography, sharp focus, square 1:1 aspect ratio, no visible
+            person, no watermark."
+          -->
         </div>
         <div class="card-info">
-          <div class="card-nome">Camisa Oficial</div>
-          <div class="card-desc">Manto titular do Catados FCCA, tecido esportivo, escudo bordado.</div>
+          <div class="card-nome">Camisa 2 Azul — ENERG Oficial</div>
+          <div class="card-desc">Segundo manto do Catados FCCA, tecido esportivo.</div>
           <div class="card-rodape">
-            <div class="preco">R$ 149<span>à vista</span></div>
-            <a class="btn" data-produto="Camisa Oficial" target="_blank" rel="noopener">Fazer pedido</a>
+            <div class="preco">R$ 99<span>à vista/pix</span></div>
+            <a class="btn" data-produto="Camisa 2 Azul - ENERG Oficial" target="_blank" rel="noopener">Fazer pedido</a>
           </div>
         </div>
       </article>
 
-      <!-- ============ PRODUTO 2: BONÉ ============ -->
+      <!-- ============ PRODUTO 2: BONÉ TRUCKER ============ -->
       <article class="card">
         <div class="card-media">
           <span class="numero">Nº <b>07</b></span>
-          <!-- IMAGEM: troque este SVG por <img src="bone.jpg" alt="Boné oficial Catados FCCA"> -->
-          <svg class="icone" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="1.4">
-            <path d="M3 15c0-5 4-9 9-9s9 4 9 9"/>
-            <path d="M2 15h20"/>
-            <path d="M12 6V3"/>
-            <path d="M17 15c1 1.5 3 1.8 4.5 1"/>
-          </svg>
+          <img class="card-foto" src="bone-trucker.jpg" alt="Boné Trucker Catados FCCA">
+          <!--
+            PROMPT USADO PARA GERAR ESTA FOTO:
+
+            "Product mockup photo of a black trucker cap, structured front
+            panel with mesh back panel, curved brim, club crest patch
+            centered on the front panel (shield badge with a cartoon
+            mascot: bald bearded man holding a beer mug and a skewer,
+            red-and-white striped jersey background, banner with a
+            founding date), three-quarter angled product shot, centered
+            composition, pure black background with a subtle dark red
+            glow/vignette around the product, dramatic studio lighting,
+            sharp focus, square 1:1 aspect ratio, no visible person, no
+            watermark."
+          -->
         </div>
         <div class="card-info">
-          <div class="card-nome">Boné Oficial</div>
-          <div class="card-desc">Aba curva, escudo bordado frontal, ajuste regulável.</div>
+          <div class="card-nome">Boné Trucker — Catados Oficial</div>
+          <div class="card-desc">Tela respirável, aba curva, ajuste regulável.</div>
           <div class="card-rodape">
-            <div class="preco">R$ 69<span>à vista</span></div>
-            <a class="btn" data-produto="Boné Oficial" target="_blank" rel="noopener">Fazer pedido</a>
+            <div class="preco">R$ 59<span>à vista/pix</span></div>
+            <a class="btn" data-produto="Boné Trucker - Catados Oficial" target="_blank" rel="noopener">Fazer pedido</a>
           </div>
         </div>
       </article>
 
-      <!-- ============ PRODUTO 3: BOLSA ============ -->
+      <!-- ============ PRODUTO 3: PORTA CHUTEIRA ============ -->
       <article class="card">
         <div class="card-media">
-          <span class="numero">Nº <b>01</b></span>
-          <!-- IMAGEM: troque este SVG por <img src="bolsa.jpg" alt="Bolsa oficial Catados FCCA"> -->
-          <svg class="icone" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="1.4">
-            <path d="M6 8h12l1 12H5L6 8z"/>
-            <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
-          </svg>
+          <span class="numero">Nº <b>04</b></span>
+          <img class="card-foto" src="porta-chuteira.jpg" alt="Porta Chuteira Catados FCCA">
+          <!--
+            PROMPT USADO PARA GERAR ESTA FOTO:
+
+            "Product mockup photo of a rectangular shoe/cleat bag with
+            rounded red piping edges and a red top handle, black fabric
+            body with a subtle red diagonal streak and paint-splatter
+            texture, club crest patch centered on the front panel (shield
+            badge with a cartoon mascot: bald bearded man holding a beer
+            mug and a skewer, red-and-white striped jersey background,
+            banner with a founding date), large customizable jersey-style
+            number '00' and 'SEU NOME' placeholder text printed below the
+            crest in a distressed white sports typography, red zipper
+            pull on top pocket, three-quarter angled product shot,
+            centered composition, pure black background with a subtle
+            dark red glow/vignette around the product, dramatic studio
+            lighting, sharp focus, square 1:1 aspect ratio, no visible
+            person, no watermark."
+          -->
         </div>
         <div class="card-info">
-          <div class="card-nome">Bolsa Oficial</div>
-          <div class="card-desc">Tote bag resistente, escudo estampado, alça reforçada.</div>
+          <div class="card-nome">Porta Chuteira — Catados Oficial</div>
+          <div class="card-desc">Bolsa ventilada para chuteiras, resistente.</div>
           <div class="card-rodape">
-            <div class="preco">R$ 59<span>à vista</span></div>
-            <a class="btn" data-produto="Bolsa Oficial" target="_blank" rel="noopener">Fazer pedido</a>
+            <div class="preco">R$ 49<span>à vista/pix</span></div>
+            <a class="btn" data-produto="Porta Chuteira - Catados Oficial" target="_blank" rel="noopener">Fazer pedido</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- ============ PRODUTO 4: BOLSA (INDISPONÍVEL) ============ -->
+      <article class="card indisponivel">
+        <div class="card-media">
+          <span class="numero">Nº <b>01</b></span>
+          <span class="badge-em-breve">Em breve</span>
+          <img class="card-foto" src="bolsa.jpg" alt="Bolsa oficial Catados FCCA">
+          <!--
+            PROMPT USADO PARA GERAR ESTA FOTO:
+
+            "Product mockup photo of a black duffel/gym bag with red
+            piping edges, black fabric with a subtle tire-tread/scratch
+            texture pattern and thin red accent lines, two black fabric
+            top handles, club crest patch centered near the handles
+            (shield badge with a cartoon mascot: bald bearded man holding
+            a beer mug and a skewer, red-and-white striped jersey
+            background, banner with a founding date), 'CATADOS F.C.C.A.'
+            wordmark printed vertically in red distressed lettering along
+            the side panel, small manufacturer logo near the base,
+            three-quarter angled product shot, centered composition, pure
+            black background with a subtle dark red glow/vignette around
+            the product, dramatic studio lighting, sharp focus, square
+            1:1 aspect ratio, no visible person, no watermark."
+          -->
+        </div>
+        <div class="card-info">
+          <div class="card-nome">Bolsa Catados Oficial</div>
+          <div class="card-desc">Tote bag resistente, alça reforçada.</div>
+          <div class="card-rodape">
+            <div class="preco">Em breve<span>indisponível</span></div>
+            <span class="btn desabilitado" aria-disabled="true">Indisponível</span>
           </div>
         </div>
       </article>
@@ -442,7 +552,9 @@
        1. Crie UM formulário só, com estes campos (nesta ordem sugerida):
             - Nome completo            (resposta curta)
             - WhatsApp                 (resposta curta)
-            - Produto                  (múltipla escolha: Camisa Oficial / Boné Oficial / Bolsa Oficial)
+            - Produto                  (múltipla escolha: Camisa 2 Azul - ENERG Oficial / Boné Trucker - Catados Oficial / Porta Chuteira - Catados Oficial)
+              -> a Bolsa Catados Oficial está "Em breve" no site e não tem botão de pedido,
+                 então não precisa entrar como opção no formulário ainda.
             - Tamanho                  (múltipla escolha: P / M / G / GG)
             - Quantidade                (resposta curta ou múltipla escolha)
 
@@ -483,15 +595,15 @@
           canto da pergunta -> "Ir para seção com base na resposta".
 
        3. Configure o destino de cada alternativa:
-            - Camisa Oficial -> Ir para Seção 2 (Tamanho)
-            - Boné Oficial   -> Ir para Seção 3 (pula o Tamanho)
-            - Bolsa Oficial  -> Ir para Seção 3 (pula o Tamanho)
+            - Camisa 2 Azul - ENERG Oficial -> Ir para Seção 2 (Tamanho)
+            - Boné Trucker - Catados Oficial -> Ir para Seção 3 (pula o Tamanho)
+            - Porta Chuteira - Catados Oficial -> Ir para Seção 3 (pula o Tamanho)
 
        4. No rodapé da Seção 2 (Tamanho), deixe "Continuar para" como
           "Ir para a próxima seção" (Seção 3), fechando o fluxo.
 
-       Resultado: quem pede camisa vê a pergunta de tamanho normalmente;
-       quem pede boné ou bolsa nunca vê essa pergunta.
+       Resultado: quem pede a camisa vê a pergunta de tamanho normalmente;
+       quem pede boné ou porta-chuteira nunca vê essa pergunta.
     */
 
     const FORM_CONFIG = {
@@ -503,7 +615,7 @@
       FORM_ENTRY_TAMANHO: "",
 
       // Produtos que devem pedir tamanho no formulário
-      PRODUTOS_COM_TAMANHO: ["Camisa Oficial"]
+      PRODUTOS_COM_TAMANHO: ["Camisa 2 Azul - ENERG Oficial"]
     };
 
     function montarLinkFormulario(produto) {
