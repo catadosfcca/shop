@@ -446,29 +446,60 @@
             - Tamanho                  (múltipla escolha: P / M / G / GG)
             - Quantidade                (resposta curta ou múltipla escolha)
 
-       2. No formulário publicado, clique nos 3 pontinhos (⋮) no canto
-          superior direito -> "Copiar Link" (ou "Obter link pré-preenchido").
+       2. Ainda na tela de edição do formulário, clique nos 3 pontinhos (⋮)
+          no canto superior direito -> "Preencher formulário".
+          (Esse é o nome atual da função; antes era chamado de
+          "Obter link pré-preenchido".)
 
-       3. Para pegar o ID de um campo específico (ex: "Produto"):
-            - Abra o formulário como se fosse responder
-            - Clique nos 3 pontinhos -> "Obter link pré-preenchido"
-            - Preencha o campo "Produto" com um valor de teste e clique em "Obter link"
-            - Copie o link gerado: ele vai ter algo como
-              ...forms.gle/xxxx?entry.123456789=valor+de+teste
-            - O número depois de "entry." é o ID daquele campo. Copie e cole
-              abaixo em FORM_ENTRY_PRODUTO. Repita o processo para o campo
-              "Tamanho" e preencha FORM_ENTRY_TAMANHO.
+       3. Isso abre o formulário como se você fosse responder. No campo
+          "Produto", digite um valor de teste (ex: TESTE).
 
-       4. Copie o link BASE do formulário (sem os parâmetros de entry.)
+       4. Clique em "Gerar link" (fica no menu ⋮ dessa tela de preview).
+
+       5. Copie o link gerado: ele vai ter algo como
+            ...forms.gle/xxxx?entry.123456789=TESTE
+          O número depois de "entry." é o ID daquele campo. Copie e cole
+          abaixo em FORM_ENTRY_PRODUTO. Repita o processo (voltando e
+          preenchendo de novo) para o campo "Tamanho" e preencha
+          FORM_ENTRY_TAMANHO.
+
+       6. Copie o link BASE do formulário (sem os parâmetros de entry.)
           para FORM_BASE_URL — normalmente termina em "/viewform".
+
+       ------------------------------------------------------------------
+
+       COMO OCULTAR "TAMANHO" PRA QUEM PEDE BONÉ OU BOLSA
+       (o campo Tamanho só faz sentido pra camisa — boné e bolsa são
+       tamanho único; o Google Forms não deixa esconder pergunta por um
+       link, mas dá pra pular ela usando seções + navegação condicional):
+
+       1. Divida o formulário em 3 seções (ícone de "Adicionar seção" na
+          barra lateral direita, parece um retângulo com duas linhas):
+            - Seção 1: Nome completo, WhatsApp, Produto
+            - Seção 2: Tamanho (só essa pergunta)
+            - Seção 3: Quantidade (e o que mais tiver)
+
+       2. Na pergunta "Produto" (Seção 1), clique nos 3 pontinhos (⋮) no
+          canto da pergunta -> "Ir para seção com base na resposta".
+
+       3. Configure o destino de cada alternativa:
+            - Camisa Oficial -> Ir para Seção 2 (Tamanho)
+            - Boné Oficial   -> Ir para Seção 3 (pula o Tamanho)
+            - Bolsa Oficial  -> Ir para Seção 3 (pula o Tamanho)
+
+       4. No rodapé da Seção 2 (Tamanho), deixe "Continuar para" como
+          "Ir para a próxima seção" (Seção 3), fechando o fluxo.
+
+       Resultado: quem pede camisa vê a pergunta de tamanho normalmente;
+       quem pede boné ou bolsa nunca vê essa pergunta.
     */
 
     const FORM_CONFIG = {
       // Link base do formulário, terminando em /viewform
-      FORM_BASE_URL: "FORM_LINK_AQUI",
+      FORM_BASE_URL: "https://docs.google.com/forms/d/e/1FAIpQLSfOUMWc2c-nBkgV2WL2xN5TTWjnQuTZSIgn5Cq0y7ArpxcAQA/viewform",
 
       // IDs dos campos (ex: "123456789") — deixe "" se ainda não tiver
-      FORM_ENTRY_PRODUTO: "",
+      FORM_ENTRY_PRODUTO: "956172927",
       FORM_ENTRY_TAMANHO: "",
 
       // Produtos que devem pedir tamanho no formulário
