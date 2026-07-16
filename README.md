@@ -17,10 +17,7 @@ shop/
 │   └── site.js            <- lógica que monta os cards e os links (não mexer)
 ├── images/
 │   ├── logo.png
-│   ├── camisa-2-azul.jpg
-│   ├── bone-trucker.jpg
-│   ├── porta-chuteira.jpg
-│   └── bolsa.jpg
+│   └── (uma foto por produto, referenciada em produtos.js)
 └── README.md
 ```
 
@@ -49,6 +46,7 @@ mudarem.
    | `imagem`         | Caminho da foto, ex: `"images/camisa-3-branca.jpg"`. |
    | `disponivel`     | `true` = à venda / `false` = aparece "Em breve", esmaecido, sem link. |
    | `temTamanho`     | `true` = pede tamanho no formulário (roupas) / `false` = tamanho único. |
+   | `temPersonalizacao` | `true` = pede Nome e Número personalizado no formulário (só camisas) / `false` = sem personalização. |
    | `promptImagem`   | Opcional — prompt de IA usado pra gerar a foto, só de referência. |
 
 4. Coloque o arquivo da foto dentro de `images/`.
@@ -91,12 +89,15 @@ Ou seja: o "link" entre o site e o formulário funciona em duas partes:
 
 ## Como configurar o Google Forms (do zero)
 
-1. Crie **um único formulário**, com estes campos, nesta ordem:
+1. Crie **um único formulário**, com estes campos:
    - Nome completo (resposta curta)
    - WhatsApp (resposta curta)
    - Produto (múltipla escolha — uma opção para cada produto com
-     `disponivel: true` em `produtos.js`)
+     `disponivel: true` em `produtos.js`, veja a lista completa mais
+     abaixo)
    - Tamanho (múltipla escolha: P / M / G / GG)
+   - Nome para estampar (resposta curta) — só pra camisas
+   - Número personalizado (resposta curta) — só pra camisas
    - Quantidade (resposta curta ou múltipla escolha)
 
    Produtos com `disponivel: false` ("Em breve") não precisam de opção
@@ -121,42 +122,82 @@ Ou seja: o "link" entre o site e o formulário funciona em duas partes:
 6. Repita o processo (voltando e preenchendo de novo) para o campo
    "Tamanho", e preencha `FORM_ENTRY_TAMANHO` em `js/config.js`.
 
+   "Nome para estampar" e "Número personalizado" **não precisam** de
+   ID no `config.js` — são campos que o comprador digita na hora,
+   não vêm pré-preenchidos pelo link do site.
+
 7. Copie o link **base** do formulário (sem os parâmetros de
    `entry.`) para `FORM_BASE_URL` em `js/config.js` — normalmente
    termina em `/viewform`.
 
-### Como esconder "Tamanho" pra quem pede boné, bolsa etc.
+### Lista de produtos para cadastrar na pergunta "Produto"
 
-O campo Tamanho só faz sentido pra camisas — boné, bolsa e porta-
-chuteira são tamanho único. O Google Forms não deixa esconder uma
-pergunta por link, mas dá pra pular ela usando seções + navegação
-condicional:
+Cada opção precisa ser **exatamente igual** (letra por letra, com
+acentos e travessão) ao `nomeFormulario` de `produtos.js`. Lista
+atual:
 
-1. Divida o formulário em 3 seções (ícone "Adicionar seção" na barra
-   lateral direita — parece um retângulo com duas linhas):
-   - **Seção 1:** Nome completo, WhatsApp, Produto
-   - **Seção 2:** Tamanho (só essa pergunta)
-   - **Seção 3:** Quantidade (e o que mais tiver)
+| id (`produtos.js`)          | Opção no Forms (`nomeFormulario`)                | Tamanho | Nome/Número |
+|------------------------------|---------------------------------------------------|:-------:|:------------:|
+| `camisa-2-azul`               | Camisa 2 Jogador Azul — ENERG Oficial              | Sim     | Sim          |
+| `camisa-2-goleiro-laranja`    | Camisa 2 Goleiro Laranja — ENERG Oficial           | Sim     | Sim          |
+| `camisa-torcedor-1-branca`    | Camisa Torcedor 1 Branca — Catados Oficial         | Sim     | Sim          |
+| `camisa-torcedor-2-listrada`  | Camisa Torcedor 2 Listrada — Catados Oficial       | Sim     | Sim          |
+| `bone-trucker`                | Boné Trucker — Catados Oficial                     | Não     | Não          |
+| `porta-chuteira`              | Porta Chuteira — Catados Oficial                   | Não     | Não          |
+| `bolsa`                       | Bolsa/Mala Catados Oficial                         | Não     | Não          |
+| `blusa`                       | Blusa Catados Oficial                              | Sim     | Não          |
+
+Essa tabela é só um retrato do momento — a fonte de verdade é sempre
+`produtos.js` (campos `nomeFormulario`, `temTamanho` e
+`temPersonalizacao`). Se editar um desses, atualize a opção
+correspondente no Forms também.
+
+### Estrutura de seções (Tamanho + Nome/Número só pra quem precisa)
+
+O Google Forms não deixa esconder uma pergunta por link, mas dá pra
+pular perguntas usando seções + navegação condicional. Como nem todo
+produto precisa de Tamanho, e nem todo produto com Tamanho precisa de
+Nome/Número (a Blusa tem tamanho mas não personalização), o
+formulário fica com **4 seções**:
+
+- **Seção 1:** Nome completo, WhatsApp, Produto
+- **Seção 2A — "Tamanho e personalização":** Tamanho, Nome para
+  estampar, Número personalizado (as 3 perguntas juntas)
+- **Seção 2B — "Só tamanho":** Tamanho (sozinha)
+- **Seção 3:** Quantidade (e o que mais tiver — fica igual pra todo
+  mundo)
+
+Passo a passo:
+
+1. Crie as 4 seções (ícone "Adicionar seção" na barra lateral direita
+   — parece um retângulo com duas linhas) e distribua as perguntas
+   como acima.
 
 2. Na pergunta "Produto" (Seção 1), clique nos 3 pontinhos (⋮) no
    canto da pergunta → **"Ir para seção com base na resposta"**.
 
-3. Configure o destino de cada opção:
-   - Produtos com `temTamanho: true` em `produtos.js` (ex: camisas) →
-     Ir para Seção 2 (Tamanho)
-   - Produtos com `temTamanho: false` (boné, bolsa, porta-chuteira) →
-     Ir para Seção 3 (pula o Tamanho)
+3. Configure o destino de cada opção, usando a coluna "Tamanho" e
+   "Nome/Número" da tabela acima:
+   - `temTamanho: true` **e** `temPersonalizacao: true` (as 4
+     camisas) → Ir para **Seção 2A**
+   - `temTamanho: true` **e** `temPersonalizacao: false` (a Blusa) →
+     Ir para **Seção 2B**
+   - `temTamanho: false` (boné, porta-chuteira, bolsa/mala) → Ir
+     direto para **Seção 3**
 
-4. No rodapé da Seção 2 (Tamanho), deixe "Continuar para" como "Ir
-   para a próxima seção" (Seção 3).
+4. No rodapé da Seção 2A, deixe "Continuar para" como "Ir para a
+   próxima seção" apontando pra **Seção 3**. Faça o mesmo no rodapé
+   da Seção 2B.
 
-Resultado: quem pede uma camisa vê a pergunta de tamanho normalmente;
-quem pede boné, bolsa ou porta-chuteira nunca vê essa pergunta.
+Resultado: quem pede uma camisa vê Tamanho + Nome + Número; quem pede
+a blusa vê só Tamanho; quem pede boné, porta-chuteira ou bolsa/mala
+não vê nenhuma das duas.
 
-**Lembrete:** sempre que adicionar um produto novo com
-`temTamanho: true` ou `false`, volte nesse passo 3 e configure o
-destino da nova opção também — isso é feito manualmente dentro do
-Google Forms, o site não controla essa parte.
+**Lembrete:** sempre que adicionar um produto novo, volte no passo 3
+e configure o destino da nova opção também (Seção 2A, 2B ou direto
+pra Seção 3, dependendo de `temTamanho` e `temPersonalizacao` em
+`produtos.js`) — isso é feito manualmente dentro do Google Forms, o
+site não controla essa parte.
 
 ---
 

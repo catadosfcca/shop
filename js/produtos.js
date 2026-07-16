@@ -60,6 +60,15 @@
                        dentro do próprio Google Forms — veja o
                        README.md.)
 
+   temPersonalizacao -> true  = ao pedir esse produto, o comprador
+                               informa "Nome" e "Número" para
+                               personalizar as costas da camisa.
+                       false = produto sem personalização de nome/
+                               número (acessórios, blusa etc.).
+                       (Assim como temTamanho, esse campo é só pra
+                       documentar quais produtos precisam dessa seção
+                       extra no Google Forms — veja README.md.)
+
    promptImagem    -> (opcional) o prompt usado para gerar a foto do
                        produto em IA, guardado aqui só de referência,
                        caso precise gerar uma variação no futuro. Pode
@@ -96,7 +105,8 @@ const PRODUTOS = [
     precoObs: "à vista/pix",
     imagem: "images/camisa-2-azul.jpg",
     disponivel: true,
-    temTamanho: true
+    temTamanho: true,
+    temPersonalizacao: true
   },
 
   {
@@ -109,7 +119,8 @@ const PRODUTOS = [
     precoObs: "à vista/pix",
     imagem: "images/camisa-2-goleiro-laranja.jpg",
     disponivel: true,
-    temTamanho: true
+    temTamanho: true,
+    temPersonalizacao: true
   },
 
   {
@@ -122,7 +133,8 @@ const PRODUTOS = [
     precoObs: "à vista/pix",
     imagem: "images/camisa-torcedor-1-branca.jpg",
     disponivel: true,
-    temTamanho: true
+    temTamanho: true,
+    temPersonalizacao: true
   },
 
   {
@@ -135,7 +147,8 @@ const PRODUTOS = [
     precoObs: "à vista/pix",
     imagem: "images/camisa-torcedor-2-listrada.jpg",
     disponivel: true,
-    temTamanho: true
+    temTamanho: true,
+    temPersonalizacao: true
   },
 
   {
@@ -149,6 +162,7 @@ const PRODUTOS = [
     imagem: "images/bone-trucker.jpg",
     disponivel: true,
     temTamanho: false,
+    temPersonalizacao: false,
     promptImagem: "Product mockup photo of a black trucker cap, structured front panel with mesh back panel, curved brim, club crest patch centered on the front panel (shield badge with a cartoon mascot: bald bearded man holding a beer mug and a skewer, red-and-white striped jersey background, banner with a founding date), three-quarter angled product shot, centered composition, pure black background with a subtle dark red glow/vignette around the product, dramatic studio lighting, sharp focus, square 1:1 aspect ratio, no visible person, no watermark."
   },
 
@@ -163,6 +177,7 @@ const PRODUTOS = [
     imagem: "images/porta-chuteira.jpg",
     disponivel: true,
     temTamanho: false,
+    temPersonalizacao: false,
     promptImagem: "Product mockup photo of a rectangular shoe/cleat bag with rounded red piping edges and a red top handle, black fabric body with a subtle red diagonal streak and paint-splatter texture, club crest patch centered on the front panel (shield badge with a cartoon mascot: bald bearded man holding a beer mug and a skewer, red-and-white striped jersey background, banner with a founding date), large customizable jersey-style number '00' and 'SEU NOME' placeholder text printed below the crest in a distressed white sports typography, red zipper pull on top pocket, three-quarter angled product shot, centered composition, pure black background with a subtle dark red glow/vignette around the product, dramatic studio lighting, sharp focus, square 1:1 aspect ratio, no visible person, no watermark."
   },
 
@@ -176,7 +191,8 @@ const PRODUTOS = [
     precoObs: "à vista/pix",
     imagem: "images/bolsa-mala.jpg",
     disponivel: true,
-    temTamanho: false
+    temTamanho: false,
+    temPersonalizacao: false
   },
 
   {
@@ -191,7 +207,8 @@ const PRODUTOS = [
     precoObs: "à vista/pix",
     imagem: "images/blusa.jpg",
     disponivel: true,
-    temTamanho: true
+    temTamanho: true,
+    temPersonalizacao: false
   },
 
 ];
