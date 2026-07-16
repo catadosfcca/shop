@@ -73,6 +73,15 @@
    4. Se o produto já estiver disponível pra venda, cadastre o texto
       exato de "nomeFormulario" como uma nova opção na pergunta
       "Produto" do Google Forms (veja README.md).
+
+   ------------------------------------------------------------------
+   ATENÇÃO — ATUALIZAÇÃO DE NOMES (produtos que já existiam):
+   "camisa-2-azul" e "bolsa" tiveram o "nome" alterado nesta edição.
+   Se o Google Forms já tinha opções com o texto ANTIGO desses dois
+   produtos, atualize as opções lá para o novo texto de
+   "nomeFormulario" abaixo — senão o pedido chega com o produto errado
+   (ou em branco). Veja README.md, seção "Como configurar o Google
+   Forms".
    ============================================================ */
 
 const PRODUTOS = [
@@ -80,15 +89,53 @@ const PRODUTOS = [
   {
     id: "camisa-2-azul",
     numero: "10",
-    nome: "Camisa 2 Azul — ENERG Oficial",
-    nomeFormulario: "Camisa 2 Azul — ENERG Oficial",
+    nome: "Camisa 2 Jogador Azul — ENERG Oficial",
+    nomeFormulario: "Camisa 2 Jogador Azul — ENERG Oficial",
     descricao: "Segundo manto do Catados FCCA, tecido esportivo.",
     preco: "R$ 99",
     precoObs: "à vista/pix",
     imagem: "images/camisa-2-azul.jpg",
     disponivel: true,
-    temTamanho: true,
-    promptImagem: "Product mockup photo of a football/soccer jersey, dark navy blue with diagonal lightning-bolt stripe pattern in a slightly lighter blue tone, 'energ' sponsor wordmark centered on chest in white with an orange accent dash, club crest patch on the upper right chest (shield badge with a cartoon mascot: bald bearded man holding a beer mug and a skewer, red-and-white striped jersey background, banner with a founding date), matching smaller crest patch on the left sleeve, sponsor wordmark on the right sleeve cuff, blue-and-orange lightning pattern trim on collar and sleeve cuffs, small manufacturer wing logo on chest, 'DRY-PREMIUM' and product tag details on hem, photographed flat/ghost-mannequin style facing forward, centered composition, pure black background with a subtle dark red glow/vignette around the product, studio product photography, sharp focus, square 1:1 aspect ratio, no visible person, no watermark."
+    temTamanho: true
+  },
+
+  {
+    id: "camisa-2-goleiro-laranja",
+    numero: "01",
+    nome: "Camisa 2 Goleiro Laranja — ENERG Oficial",
+    nomeFormulario: "Camisa 2 Goleiro Laranja — ENERG Oficial",
+    descricao: "Camisa oficial de goleiro, tecido esportivo respirável.",
+    preco: "R$ 99",
+    precoObs: "à vista/pix",
+    imagem: "images/camisa-2-goleiro-laranja.jpg",
+    disponivel: true,
+    temTamanho: true
+  },
+
+  {
+    id: "camisa-torcedor-1-branca",
+    numero: "12",
+    nome: "Camisa Torcedor 1 Branca — Catados Oficial",
+    nomeFormulario: "Camisa Torcedor 1 Branca — Catados Oficial",
+    descricao: "Camisa oficial da torcida, modelo branco, tecido leve.",
+    preco: "R$ 99",
+    precoObs: "à vista/pix",
+    imagem: "images/camisa-torcedor-1-branca.jpg",
+    disponivel: true,
+    temTamanho: true
+  },
+
+  {
+    id: "camisa-torcedor-2-listrada",
+    numero: "12",
+    nome: "Camisa Torcedor 2 Listrada — Catados Oficial",
+    nomeFormulario: "Camisa Torcedor 2 Listrada — Catados Oficial",
+    descricao: "Camisa oficial da torcida, listrada tradicional, tecido leve.",
+    preco: "R$ 99",
+    precoObs: "à vista/pix",
+    imagem: "images/camisa-torcedor-2-listrada.jpg",
+    disponivel: true,
+    temTamanho: true
   },
 
   {
@@ -121,16 +168,15 @@ const PRODUTOS = [
 
   {
     id: "bolsa",
-    numero: "01",
-    nome: "Bolsa Catados Oficial",
-    nomeFormulario: "Bolsa Catados Oficial",
-    descricao: "Tote bag resistente, alça reforçada.",
-    preco: "Em breve",
-    precoObs: "indisponível",
-    imagem: "images/bolsa.jpg",
-    disponivel: false,
-    temTamanho: false,
-    promptImagem: "Product photography, BOLSA CATADOS OFICIAL on a dark charcoal-black background (#0B0B0C), dramatic studio lighting with a subtle red rim light (#C8102E), soft shadow beneath the product, centered composition, square 1:1 aspect ratio, sports merchandise catalog style, sharp focus, no text, no watermark, no people, high detail fabric/texture."
+    numero: "00",
+    nome: "Bolsa/Mala Catados Oficial",
+    nomeFormulario: "Bolsa/Mala Catados Oficial",
+    descricao: "Mala esportiva reforçada, alça de mão e tiracolo.",
+    preco: "R$ 59",
+    precoObs: "à vista/pix",
+    imagem: "images/bolsa-mala.jpg",
+    disponivel: true,
+    temTamanho: false
   },
 
 ];
