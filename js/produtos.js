@@ -211,4 +211,19 @@ const PRODUTOS = [
     temPersonalizacao: false
   },
 
+  {
+    id: "blusa",
+    numero: "08",
+    nome: "Blusa Catados Oficial",
+    nomeFormulario: "Blusa Catados Oficial",
+    // ATENÇÃO: preço ainda não informado — usei R$ 99 como referência
+    // (mesma faixa das camisas). Ajuste o valor abaixo antes de divulgar.
+    descricao: "Jaqueta oficial do Catados FCCA, zíper e detalhes exclusivos.",
+    preco: "R$ 99",
+    precoObs: "à vista/pix",
+    imagem: "images/blusa.jpg",
+    disponivel: true,
+    temTamanho: true
+  },
+
 ];
