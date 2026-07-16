@@ -88,7 +88,7 @@ const PRODUTOS = [
 
   {
     id: "camisa-2-azul",
-    numero: "10",
+    numero: "01",
     nome: "Camisa 2 Jogador Azul — ENERG Oficial",
     nomeFormulario: "Camisa 2 Jogador Azul — ENERG Oficial",
     descricao: "Segundo manto do Catados FCCA, tecido esportivo.",
@@ -101,7 +101,7 @@ const PRODUTOS = [
 
   {
     id: "camisa-2-goleiro-laranja",
-    numero: "01",
+    numero: "02",
     nome: "Camisa 2 Goleiro Laranja — ENERG Oficial",
     nomeFormulario: "Camisa 2 Goleiro Laranja — ENERG Oficial",
     descricao: "Camisa oficial de goleiro, tecido esportivo respirável.",
@@ -114,7 +114,7 @@ const PRODUTOS = [
 
   {
     id: "camisa-torcedor-1-branca",
-    numero: "12",
+    numero: "03",
     nome: "Camisa Torcedor 1 Branca — Catados Oficial",
     nomeFormulario: "Camisa Torcedor 1 Branca — Catados Oficial",
     descricao: "Camisa oficial da torcida, modelo branco, tecido leve.",
@@ -127,7 +127,7 @@ const PRODUTOS = [
 
   {
     id: "camisa-torcedor-2-listrada",
-    numero: "12",
+    numero: "04",
     nome: "Camisa Torcedor 2 Listrada — Catados Oficial",
     nomeFormulario: "Camisa Torcedor 2 Listrada — Catados Oficial",
     descricao: "Camisa oficial da torcida, listrada tradicional, tecido leve.",
@@ -140,7 +140,7 @@ const PRODUTOS = [
 
   {
     id: "bone-trucker",
-    numero: "07",
+    numero: "05",
     nome: "Boné Trucker — Catados Oficial",
     nomeFormulario: "Boné Trucker — Catados Oficial",
     descricao: "Tela respirável, aba curva, ajuste regulável.",
@@ -154,7 +154,7 @@ const PRODUTOS = [
 
   {
     id: "porta-chuteira",
-    numero: "04",
+    numero: "06",
     nome: "Porta Chuteira — Catados Oficial",
     nomeFormulario: "Porta Chuteira — Catados Oficial",
     descricao: "Bolsa ventilada para chuteiras, resistente.",
@@ -168,7 +168,7 @@ const PRODUTOS = [
 
   {
     id: "bolsa",
-    numero: "00",
+    numero: "07",
     nome: "Bolsa/Mala Catados Oficial",
     nomeFormulario: "Bolsa/Mala Catados Oficial",
     descricao: "Mala esportiva reforçada, alça de mão e tiracolo.",
