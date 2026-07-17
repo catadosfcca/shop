@@ -6,6 +6,14 @@
      - marcar como "em breve" / indisponível
 
    Não precisa mexer em index.html nem em site.js para isso.
+
+   O pedido funciona por CARRINHO: o comprador escolhe tamanho,
+   nome, número e quantidade no próprio card do produto, adiciona
+   quantos itens quiser, e no final manda tudo de uma vez num único
+   link do Google Forms (campo "Resumo do Pedido"). Por isso
+   `temTamanho` e `temPersonalizacao` controlam diretamente o que
+   aparece no CARD DO SITE — não é mais preciso configurar seções
+   nem navegação condicional no Forms. Veja README.md.
    ============================================================
 
    CAMPOS DE CADA PRODUTO:
@@ -20,17 +28,14 @@
                        do card (ex: "10", "07"). Pode repetir entre
                        produtos, é só estético.
 
-   nome            -> nome exibido no site (título do card).
+   nome            -> nome exibido no site e usado no resumo do pedido
+                       que chega pro Google Forms.
 
-   nomeFormulario  -> texto que será enviado como resposta pré-preenchida
-                       no campo "Produto" do Google Forms. PRECISA ser
-                       EXATAMENTE IGUAL a uma das opções cadastradas na
-                       pergunta "Produto" do formulário (letra, acento,
-                       maiúscula/minúscula e travessão incluídos).
-                       Se você mudar o "nome" de exibição mas não quiser
-                       editar a opção no Forms, mantenha o
-                       nomeFormulario com o texto antigo que já existe
-                       lá.
+   nomeFormulario  -> legado/opcional, não é mais necessário pro
+                       carrinho funcionar. Só importa se você decidir
+                       adicionar de volta uma pergunta separada de
+                       múltipla escolha "Produto" no Forms (veja nota
+                       no README.md). Pode deixar como está.
 
    descricao       -> frase curta abaixo do nome no card.
 
@@ -43,31 +48,21 @@
                        Coloque o arquivo de imagem dentro da pasta
                        /images.
 
-   disponivel      -> true  = produto normal, com botão "Fazer pedido"
+   disponivel      -> true  = produto normal, com controles de pedido
+                               e botão "Adicionar ao pedido".
                        false = produto aparece esmaecido, com selo
-                               "Em breve" e botão desabilitado. Produtos
-                               com disponivel:false NÃO precisam ter uma
-                               opção correspondente no Google Forms
-                               ainda.
+                               "Em breve" e botão desabilitado.
 
-   temTamanho      -> true  = ao pedir esse produto, o comprador vai
-                               responder também o campo "Tamanho" no
-                               formulário (ex: roupas P/M/G/GG).
+   temTamanho      -> true  = mostra um seletor de Tamanho (P/M/G/GG)
+                               no card desse produto.
                        false = produto de tamanho único (boné, bolsa,
-                               porta-chuteira etc.), o formulário pula a
-                               pergunta de tamanho pra esse produto.
-                       (A lógica de pular a pergunta é configurada
-                       dentro do próprio Google Forms — veja o
-                       README.md.)
+                               porta-chuteira etc.) — sem seletor.
 
-   temPersonalizacao -> true  = ao pedir esse produto, o comprador
-                               informa "Nome" e "Número" para
-                               personalizar as costas da camisa.
+   temPersonalizacao -> true  = mostra os campos "Nome" e "Número"
+                               (opcionais) no card desse produto, pra
+                               personalizar a estampa.
                        false = produto sem personalização de nome/
                                número (acessórios, blusa etc.).
-                       (Assim como temTamanho, esse campo é só pra
-                       documentar quais produtos precisam dessa seção
-                       extra no Google Forms — veja README.md.)
 
    promptImagem    -> (opcional) o prompt usado para gerar a foto do
                        produto em IA, guardado aqui só de referência,
@@ -79,18 +74,8 @@
    1. Copie um dos blocos { ... } abaixo e cole antes do "];" no final.
    2. Preencha os campos.
    3. Coloque a foto do produto em /images.
-   4. Se o produto já estiver disponível pra venda, cadastre o texto
-      exato de "nomeFormulario" como uma nova opção na pergunta
-      "Produto" do Google Forms (veja README.md).
-
-   ------------------------------------------------------------------
-   ATENÇÃO — ATUALIZAÇÃO DE NOMES (produtos que já existiam):
-   "camisa-2-azul" e "bolsa" tiveram o "nome" alterado nesta edição.
-   Se o Google Forms já tinha opções com o texto ANTIGO desses dois
-   produtos, atualize as opções lá para o novo texto de
-   "nomeFormulario" abaixo — senão o pedido chega com o produto errado
-   (ou em branco). Veja README.md, seção "Como configurar o Google
-   Forms".
+   4. Pronto — não precisa mexer no Google Forms, o carrinho já monta
+      o resumo do pedido usando o "nome" que você cadastrou.
    ============================================================ */
 
 const PRODUTOS = [
