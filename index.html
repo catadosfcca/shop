@@ -17,6 +17,8 @@
        - Para adicionar/editar/remover PRODUTOS -> js/produtos.js
        - Para configurar o Google Forms          -> js/config.js
        - Para mudar cores/estilo                 -> css/style.css
+       - O carrinho (drawer + toast aqui embaixo) é controlado
+         inteiramente por js/site.js.
 
        Veja README.md para o passo a passo completo.
        ============================================================ -->
@@ -26,7 +28,17 @@
       <div class="crest"><img src="images/logo.png" alt="Escudo Catados FCCA"></div>
       <div class="brand-name">Catados <span>FCCA</span></div>
     </div>
-    <div class="topbar-tag">Loja Oficial</div>
+    <div class="topbar-right">
+      <div class="topbar-tag">Loja Oficial</div>
+      <button id="btn-carrinho" class="btn-carrinho" type="button" aria-label="Ver pedido">
+        <svg class="icone-carrinho" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        <span id="carrinho-badge" class="carrinho-badge" hidden>0</span>
+      </button>
+    </div>
   </div>
 
   <section class="hero">
@@ -48,6 +60,24 @@
   <footer>
     <p><span class="rodape-crest">CATADOS FCCA</span> — Loja Oficial · Pedidos via formulário · © 2026</p>
   </footer>
+
+  <!-- Carrinho: pedido com vários itens, enviado num único link do Forms -->
+  <div id="carrinho-overlay" class="carrinho-overlay"></div>
+  <aside id="carrinho-drawer" class="carrinho-drawer" aria-label="Seu pedido">
+    <div class="carrinho-header">
+      <span>Seu pedido</span>
+      <button id="btn-fechar-carrinho" type="button" aria-label="Fechar pedido">×</button>
+    </div>
+    <div id="carrinho-itens" class="carrinho-itens">
+      <!-- Preenchido via JS a partir do carrinho salvo no navegador -->
+    </div>
+    <div class="carrinho-footer">
+      <button id="btn-limpar-carrinho" class="btn-limpar" type="button">Limpar pedido</button>
+      <button id="btn-finalizar" class="btn btn-finalizar" type="button">Finalizar pedido</button>
+    </div>
+  </aside>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script src="js/produtos.js"></script>
   <script src="js/config.js"></script>
