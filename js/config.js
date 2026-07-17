@@ -15,5 +15,5 @@ const FORM_CONFIG = {
   // (produto, tamanho, nome, número e quantidade de cada um).
   // O número depois de "entry." no link de pré-preenchimento. Deixe ""
   // se ainda não tiver criado esse campo no Forms.
-  FORM_ENTRY_RESUMO: "",
+  FORM_ENTRY_RESUMO: "1430321684",
 };
