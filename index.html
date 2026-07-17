@@ -17,8 +17,8 @@
        - Para adicionar/editar/remover PRODUTOS -> js/produtos.js
        - Para configurar o Google Forms          -> js/config.js
        - Para mudar cores/estilo                 -> css/style.css
-       - O carrinho (drawer + toast aqui embaixo) é controlado
-         inteiramente por js/site.js.
+       - O carrinho (botão flutuante + drawer + toast aqui embaixo)
+         é controlado inteiramente por js/site.js.
 
        Veja README.md para o passo a passo completo.
        ============================================================ -->
@@ -28,17 +28,7 @@
       <div class="crest"><img src="images/logo.png" alt="Escudo Catados FCCA"></div>
       <div class="brand-name">Catados <span>FCCA</span></div>
     </div>
-    <div class="topbar-right">
-      <div class="topbar-tag">Loja Oficial</div>
-      <button id="btn-carrinho" class="btn-carrinho" type="button" aria-label="Ver pedido">
-        <svg class="icone-carrinho" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="9" cy="21" r="1"></circle>
-          <circle cx="20" cy="21" r="1"></circle>
-          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-        </svg>
-        <span id="carrinho-badge" class="carrinho-badge" hidden>0</span>
-      </button>
-    </div>
+    <div class="topbar-tag">Loja Oficial</div>
   </div>
 
   <section class="hero">
@@ -62,6 +52,15 @@
   </footer>
 
   <!-- Carrinho: pedido com vários itens, enviado num único link do Forms -->
+  <button id="btn-carrinho" class="btn-carrinho-flutuante" type="button" aria-label="Ver pedido">
+    <svg class="icone-carrinho" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="9" cy="21" r="1"></circle>
+      <circle cx="20" cy="21" r="1"></circle>
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+    </svg>
+    <span id="carrinho-badge" class="carrinho-badge" hidden>0</span>
+  </button>
+
   <div id="carrinho-overlay" class="carrinho-overlay"></div>
   <aside id="carrinho-drawer" class="carrinho-drawer" aria-label="Seu pedido">
     <div class="carrinho-header">
