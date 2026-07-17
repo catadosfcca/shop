@@ -5,7 +5,7 @@
 
    Como funciona o pedido com vários itens:
    1. Cada card tem um botão "Adicionar ao pedido", que guarda o
-      item (produto + tamanho + nome/número + quantidade) no
+      item (produto + cor/tamanho + nome/número + quantidade) no
       carrinho, salvo no navegador do comprador (localStorage).
    2. O ícone de carrinho no topo mostra quantos itens já foram
       adicionados e abre um painel lateral com a lista.
@@ -45,10 +45,11 @@ function salvarCarrinho(carrinho) {
 function adicionarAoCarrinho(produto, campos) {
   const carrinho = carregarCarrinho();
 
-  // Se já existe um item igual (mesmo produto, tamanho, nome e número),
-  // só soma a quantidade em vez de criar uma linha duplicada.
+  // Se já existe um item igual (mesmo produto, cor, tamanho, nome e
+  // número), só soma a quantidade em vez de criar uma linha duplicada.
   const existente = carrinho.find((item) =>
     item.produtoId === produto.id &&
+    item.cor === campos.cor &&
     item.tamanho === campos.tamanho &&
     item.nomePersonalizado === campos.nome &&
     item.numeroPersonalizado === campos.numero
@@ -62,6 +63,7 @@ function adicionarAoCarrinho(produto, campos) {
       produtoId: produto.id,
       nome: produto.nome,
       imagem: produto.imagem,
+      cor: campos.cor || "",
       tamanho: campos.tamanho || "",
       nomePersonalizado: campos.nome || "",
       numeroPersonalizado: campos.numero || "",
@@ -116,6 +118,17 @@ function criarCardHTML(produto) {
     `;
   }
 
+  const campoCor = (produto.cores && produto.cores.length) ? `
+    <div>
+      <label class="campo-label" for="cor-${produto.id}">Cor</label>
+      <select class="select-tamanho" id="cor-${produto.id}" data-campo="cor">
+        ${produto.cores.map((cor, indice) =>
+          `<option value="${escapeHtml(cor)}"${indice === 0 ? " selected" : ""}>${escapeHtml(cor)}</option>`
+        ).join("")}
+      </select>
+    </div>
+  ` : "";
+
   const campoTamanho = produto.temTamanho ? `
     <div>
       <label class="campo-label" for="tamanho-${produto.id}">Tamanho</label>
@@ -141,8 +154,8 @@ function criarCardHTML(produto) {
     </div>
   ` : "";
 
-  const opcoes = (campoTamanho || camposPersonalizacao)
-    ? `<div class="card-opcoes">${campoTamanho}${camposPersonalizacao}</div>`
+  const opcoes = (campoCor || campoTamanho || camposPersonalizacao)
+    ? `<div class="card-opcoes">${campoCor}${campoTamanho}${camposPersonalizacao}</div>`
     : "";
 
   return `
@@ -179,7 +192,10 @@ function renderizarCatalogo() {
 }
 
 function lerCamposCard(article) {
-  const campos = { tamanho: "", nome: "", numero: "", quantidade: 1 };
+  const campos = { cor: "", tamanho: "", nome: "", numero: "", quantidade: 1 };
+
+  const corEl = article.querySelector('[data-campo="cor"]');
+  if (corEl) campos.cor = corEl.value;
 
   const tamanhoEl = article.querySelector('[data-campo="tamanho"]');
   if (tamanhoEl) campos.tamanho = tamanhoEl.value;
@@ -240,6 +256,7 @@ function bindEventosGrid() {
 
 function renderizarItemCarrinho(item) {
   const detalhes = [];
+  if (item.cor) detalhes.push(`Cor ${escapeHtml(item.cor)}`);
   if (item.tamanho) detalhes.push(`Tamanho ${escapeHtml(item.tamanho)}`);
   if (item.nomePersonalizado) detalhes.push(`Nome "${escapeHtml(item.nomePersonalizado)}"`);
   if (item.numeroPersonalizado) detalhes.push(`Nº ${escapeHtml(item.numeroPersonalizado)}`);
@@ -328,6 +345,7 @@ function montarResumoPedido(carrinho) {
   return carrinho.map((item, indice) => {
     const linhas = [`${indice + 1}) ${item.nome} (Qtd: ${item.quantidade})`];
     const detalhes = [];
+    if (item.cor) detalhes.push(`Cor: ${item.cor}`);
     if (item.tamanho) detalhes.push(`Tamanho: ${item.tamanho}`);
     if (item.nomePersonalizado) detalhes.push(`Nome: ${item.nomePersonalizado}`);
     if (item.numeroPersonalizado) detalhes.push(`Número: ${item.numeroPersonalizado}`);

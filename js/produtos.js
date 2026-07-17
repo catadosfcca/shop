@@ -64,6 +64,17 @@
                        false = produto sem personalização de nome/
                                número (acessórios, blusa etc.).
 
+   cores           -> (opcional) lista de cores disponíveis, ex:
+                       ["Preto", "Branco"]. Se presente, mostra um
+                       seletor de Cor no card, e a cor escolhida entra
+                       no resumo do pedido. Se o produto não tem
+                       variação de cor, pode omitir esse campo (ou
+                       deixar como [] / não escrever nada).
+                       Obs: hoje a foto do produto é a mesma pra
+                       qualquer cor escolhida (não trocamos a imagem
+                       por cor) — se quiser uma foto por cor, isso
+                       exigiria uma mudança maior no site.
+
    promptImagem    -> (opcional) o prompt usado para gerar a foto do
                        produto em IA, guardado aqui só de referência,
                        caso precise gerar uma variação no futuro. Pode
@@ -162,7 +173,7 @@ const PRODUTOS = [
     imagem: "images/porta-chuteira.jpg",
     disponivel: true,
     temTamanho: false,
-    temPersonalizacao: false,
+    temPersonalizacao: true,
     promptImagem: "Product mockup photo of a rectangular shoe/cleat bag with rounded red piping edges and a red top handle, black fabric body with a subtle red diagonal streak and paint-splatter texture, club crest patch centered on the front panel (shield badge with a cartoon mascot: bald bearded man holding a beer mug and a skewer, red-and-white striped jersey background, banner with a founding date), large customizable jersey-style number '00' and 'SEU NOME' placeholder text printed below the crest in a distressed white sports typography, red zipper pull on top pocket, three-quarter angled product shot, centered composition, pure black background with a subtle dark red glow/vignette around the product, dramatic studio lighting, sharp focus, square 1:1 aspect ratio, no visible person, no watermark."
   },
 
@@ -193,6 +204,38 @@ const PRODUTOS = [
     imagem: "images/blusa.jpg",
     disponivel: true,
     temTamanho: true,
+    temPersonalizacao: false
+  },
+
+  {
+    id: "copo-termico",
+    numero: "09",
+    nome: "Copo Térmico Catados",
+    nomeFormulario: "Copo Térmico Catados",
+    descricao: "Aço inox, parede dupla, tampa com canudo. 590ml.",
+    preco: "R$ 65",
+    precoObs: "à vista/pix",
+    imagem: "images/copo-termico.jpg",
+    disponivel: true,
+    temTamanho: false,
+    temPersonalizacao: false,
+    // Só temos foto do modelo preto por enquanto — a mesma foto
+    // aparece pra qualquer cor escolhida. Se tiver foto do branco,
+    // troque aqui pra um seletor de imagem por cor (mudança maior).
+    cores: ["Preto", "Branco"]
+  },
+
+  {
+    id: "chaveiro",
+    numero: "10",
+    nome: "Chaveiro Oficial Catados",
+    nomeFormulario: "Chaveiro Oficial Catados",
+    descricao: "Acrílico resistente, escudo Catados FCCA dos dois lados.",
+    preco: "R$ 4,99",
+    precoObs: "à vista/pix",
+    imagem: "images/chaveiro.jpg",
+    disponivel: true,
+    temTamanho: false,
     temPersonalizacao: false
   },
 

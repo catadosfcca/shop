@@ -73,7 +73,8 @@ por produto.
    | `imagem`         | Caminho da foto, ex: `"images/camisa-3-branca.jpg"`. |
    | `disponivel`     | `true` = à venda / `false` = aparece "Em breve", esmaecido, sem botão. |
    | `temTamanho`     | `true` = mostra o seletor de Tamanho no card (roupas) / `false` = sem seletor (produto de tamanho único). |
-   | `temPersonalizacao` | `true` = mostra os campos de Nome e Número no card (hoje, só as camisas) / `false` = sem esses campos. |
+   | `temPersonalizacao` | `true` = mostra os campos de Nome e Número no card (hoje: camisas e porta-chuteira) / `false` = sem esses campos. |
+   | `cores`          | Opcional — lista de cores, ex: `["Preto", "Branco"]`. Mostra um seletor de Cor no card. Omita se o produto não tem variação de cor. |
    | `promptImagem`   | Opcional — prompt de IA usado pra gerar a foto, só de referência. |
 
 4. Coloque o arquivo da foto dentro de `images/`.
