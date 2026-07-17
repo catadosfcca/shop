@@ -124,6 +124,10 @@ img, svg{ display:block; max-width:100%; }
   justify-content:center;
 }
 
+.carrinho-badge[hidden]{
+  display:none;
+}
+
 @media (min-width: 900px){
   .btn-carrinho-flutuante{
     right:32px;
@@ -355,6 +359,10 @@ img, svg{ display:block; max-width:100%; }
   margin-bottom: 4px;
 }
 
+.campo-obrigatorio{
+  color: var(--vermelho);
+}
+
 .select-tamanho,
 .input-personalizado{
   width:100%;
@@ -371,6 +379,16 @@ img, svg{ display:block; max-width:100%; }
 .input-personalizado:focus{
   outline: 2px solid var(--vermelho);
   outline-offset: 1px;
+}
+
+.select-fixo{
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.input-personalizado.campo-erro,
+.select-tamanho.campo-erro{
+  border-color: var(--vermelho);
 }
 
 .linha-dupla{

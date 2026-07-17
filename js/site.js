@@ -62,7 +62,7 @@ function adicionarAoCarrinho(produto, campos) {
       itemId: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       produtoId: produto.id,
       nome: produto.nome,
-      imagem: produto.imagem,
+      imagem: obterImagemParaCor(produto, campos.cor),
       cor: campos.cor || "",
       tamanho: campos.tamanho || "",
       nomePersonalizado: campos.nome || "",
@@ -96,6 +96,10 @@ function limparCarrinho() {
 }
 
 /* ---------- RENDERIZAÇÃO DOS CARDS DE PRODUTO ---------- */
+
+function obterImagemParaCor(produto, cor) {
+  return (produto.imagensPorCor && produto.imagensPorCor[cor]) || produto.imagem;
+}
 
 function criarCardHTML(produto) {
   if (!produto.disponivel) {
@@ -139,17 +143,26 @@ function criarCardHTML(produto) {
         <option value="GG">GG</option>
       </select>
     </div>
-  ` : "";
+  ` : (produto.tamanhoFixo ? `
+    <div>
+      <label class="campo-label" for="tamanho-${produto.id}">Tamanho</label>
+      <select class="select-tamanho select-fixo" id="tamanho-${produto.id}" data-campo="tamanho" disabled aria-disabled="true">
+        <option value="${escapeHtml(produto.tamanhoFixo)}" selected>${escapeHtml(produto.tamanhoFixo)}</option>
+      </select>
+    </div>
+  ` : "");
+
+  const nomeObrigatorio = produto.temPersonalizacao && produto.personalizacaoObrigatoria;
 
   const camposPersonalizacao = produto.temPersonalizacao ? `
     <div class="linha-dupla">
       <div>
-        <label class="campo-label" for="nome-${produto.id}">Nome (opcional)</label>
-        <input class="input-personalizado" id="nome-${produto.id}" data-campo="nome" type="text" maxlength="20" placeholder="Ex: JOÃO">
+        <label class="campo-label" for="nome-${produto.id}">Nome${nomeObrigatorio ? ' <span class="campo-obrigatorio">*</span>' : " (opcional)"}</label>
+        <input class="input-personalizado" id="nome-${produto.id}" data-campo="nome" type="text" maxlength="20" placeholder="Ex: JOÃO"${nomeObrigatorio ? " required" : ""}>
       </div>
       <div>
-        <label class="campo-label" for="numero-${produto.id}">Número (opcional)</label>
-        <input class="input-personalizado" id="numero-${produto.id}" data-campo="numero" type="text" maxlength="3" inputmode="numeric" placeholder="Ex: 10">
+        <label class="campo-label" for="numero-${produto.id}">Número${nomeObrigatorio ? ' <span class="campo-obrigatorio">*</span>' : " (opcional)"}</label>
+        <input class="input-personalizado" id="numero-${produto.id}" data-campo="numero" type="text" maxlength="3" inputmode="numeric" placeholder="Ex: 10"${nomeObrigatorio ? " required" : ""}>
       </div>
     </div>
   ` : "";
@@ -158,11 +171,15 @@ function criarCardHTML(produto) {
     ? `<div class="card-opcoes">${campoCor}${campoTamanho}${camposPersonalizacao}</div>`
     : "";
 
+  const imagemInicial = (produto.cores && produto.cores.length)
+    ? obterImagemParaCor(produto, produto.cores[0])
+    : produto.imagem;
+
   return `
     <article class="card" data-produto-id="${escapeHtml(produto.id)}">
       <div class="card-media">
         <span class="numero">Nº <b>${escapeHtml(produto.numero)}</b></span>
-        <img class="card-foto" src="${escapeHtml(produto.imagem)}" alt="${escapeHtml(produto.nome)}">
+        <img class="card-foto" src="${escapeHtml(imagemInicial)}" alt="${escapeHtml(produto.nome)}">
       </div>
       <div class="card-info">
         <div class="card-nome">${escapeHtml(produto.nome)}</div>
@@ -221,6 +238,20 @@ function limparCamposCard(article) {
   if (qtdEl) qtdEl.textContent = "1";
 }
 
+function validarCamposObrigatorios(article, produto, campos) {
+  const camposInvalidos = [];
+
+  if (produto.temPersonalizacao && produto.personalizacaoObrigatoria) {
+    if (!campos.nome) camposInvalidos.push(article.querySelector('[data-campo="nome"]'));
+    if (!campos.numero) camposInvalidos.push(article.querySelector('[data-campo="numero"]'));
+  }
+
+  article.querySelectorAll(".campo-erro").forEach((el) => el.classList.remove("campo-erro"));
+  camposInvalidos.forEach((el) => el && el.classList.add("campo-erro"));
+
+  return camposInvalidos.filter(Boolean);
+}
+
 function bindEventosGrid() {
   const grid = document.getElementById("grid-produtos");
   if (!grid) return;
@@ -245,10 +276,32 @@ function bindEventosGrid() {
 
     if (acao === "adicionar") {
       const campos = lerCamposCard(article);
+
+      const camposInvalidos = validarCamposObrigatorios(article, produto, campos);
+      if (camposInvalidos.length) {
+        camposInvalidos[0].focus();
+        mostrarToast("Preencha Nome e Número antes de adicionar");
+        return;
+      }
+
       adicionarAoCarrinho(produto, campos);
       limparCamposCard(article);
       mostrarToast(`${produto.nome} adicionado ao pedido`);
     }
+  });
+
+  // Troca a foto do card quando o comprador muda a cor selecionada.
+  grid.addEventListener("change", (evento) => {
+    if (evento.target.getAttribute("data-campo") !== "cor") return;
+
+    const article = evento.target.closest("article[data-produto-id]");
+    if (!article) return;
+
+    const produto = PRODUTOS.find((p) => p.id === article.getAttribute("data-produto-id"));
+    if (!produto) return;
+
+    const foto = article.querySelector(".card-foto");
+    if (foto) foto.src = obterImagemParaCor(produto, evento.target.value);
   });
 }
 
