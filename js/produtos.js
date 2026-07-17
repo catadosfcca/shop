@@ -53,16 +53,47 @@
                        false = produto aparece esmaecido, com selo
                                "Em breve" e botão desabilitado.
 
-   temTamanho      -> true  = mostra um seletor de Tamanho (P/M/G/GG)
-                               no card desse produto.
-                       false = produto de tamanho único (boné, bolsa,
-                               porta-chuteira etc.) — sem seletor.
+   temTamanho      -> true  = mostra um seletor de Tamanho (P/M/G/GG),
+                               editável, no card desse produto.
+                       false = sem seletor editável. Se quiser mostrar
+                               um "Tamanho Único" fixo (não editável),
+                               use o campo tamanhoFixo (abaixo) junto
+                               com temTamanho: false.
 
-   temPersonalizacao -> true  = mostra os campos "Nome" e "Número"
-                               (opcionais) no card desse produto, pra
-                               personalizar a estampa.
+   tamanhoFixo     -> (opcional) só faz sentido com temTamanho: false.
+                       Texto fixo mostrado no lugar do seletor de
+                       Tamanho, desabilitado (o comprador não pode
+                       mudar). Hoje usado como "Único" no Boné, na
+                       Bolsa/Mala e no Porta Chuteira. Omita se não
+                       quiser mostrar nada de tamanho nesse produto.
+
+   temPersonalizacao -> true  = mostra os campos "Nome" e "Número" no
+                               card desse produto, pra personalizar a
+                               estampa.
                        false = produto sem personalização de nome/
                                número (acessórios, blusa etc.).
+
+   personalizacaoObrigatoria -> só importa se temPersonalizacao: true.
+                       true  = Nome e Número ficam OBRIGATÓRIOS — o
+                               site bloqueia "Adicionar ao pedido" se
+                               estiverem em branco (hoje: as 4
+                               camisas).
+                       false = Nome e Número continuam opcionais (hoje:
+                               Porta Chuteira).
+
+   cores           -> (opcional) lista de cores disponíveis, ex:
+                       ["Preto", "Branco"]. Se presente, mostra um
+                       seletor de Cor no card, e a cor escolhida entra
+                       no resumo do pedido. Se o produto não tem
+                       variação de cor, pode omitir esse campo.
+
+   imagensPorCor   -> (opcional) só faz sentido junto com cores. Mapa
+                       de cor -> caminho da foto, ex:
+                       { "Preto": "images/copo-termico.jpg",
+                         "Branco": "images/copo-termico-branco.jpg" }
+                       Ao trocar a cor no seletor, a foto do card troca
+                       junto. Se uma cor não tiver entrada nesse mapa,
+                       usa a foto padrão do campo "imagem".
 
    promptImagem    -> (opcional) o prompt usado para gerar a foto do
                        produto em IA, guardado aqui só de referência,
@@ -91,7 +122,8 @@ const PRODUTOS = [
     imagem: "images/camisa-2-azul.jpg",
     disponivel: true,
     temTamanho: true,
-    temPersonalizacao: true
+    temPersonalizacao: true,
+    personalizacaoObrigatoria: true
   },
 
   {
@@ -105,7 +137,8 @@ const PRODUTOS = [
     imagem: "images/camisa-2-goleiro-laranja.jpg",
     disponivel: true,
     temTamanho: true,
-    temPersonalizacao: true
+    temPersonalizacao: true,
+    personalizacaoObrigatoria: true
   },
 
   {
@@ -119,7 +152,8 @@ const PRODUTOS = [
     imagem: "images/camisa-torcedor-1-branca.jpg",
     disponivel: true,
     temTamanho: true,
-    temPersonalizacao: true
+    temPersonalizacao: true,
+    personalizacaoObrigatoria: true
   },
 
   {
@@ -133,7 +167,8 @@ const PRODUTOS = [
     imagem: "images/camisa-torcedor-2-listrada.jpg",
     disponivel: true,
     temTamanho: true,
-    temPersonalizacao: true
+    temPersonalizacao: true,
+    personalizacaoObrigatoria: true
   },
 
   {
@@ -147,6 +182,7 @@ const PRODUTOS = [
     imagem: "images/bone-trucker.jpg",
     disponivel: true,
     temTamanho: false,
+    tamanhoFixo: "Único",
     temPersonalizacao: false,
     promptImagem: "Product mockup photo of a black trucker cap, structured front panel with mesh back panel, curved brim, club crest patch centered on the front panel (shield badge with a cartoon mascot: bald bearded man holding a beer mug and a skewer, red-and-white striped jersey background, banner with a founding date), three-quarter angled product shot, centered composition, pure black background with a subtle dark red glow/vignette around the product, dramatic studio lighting, sharp focus, square 1:1 aspect ratio, no visible person, no watermark."
   },
@@ -162,7 +198,9 @@ const PRODUTOS = [
     imagem: "images/porta-chuteira.jpg",
     disponivel: true,
     temTamanho: false,
-    temPersonalizacao: false,
+    tamanhoFixo: "Único",
+    temPersonalizacao: true,
+    personalizacaoObrigatoria: false,
     promptImagem: "Product mockup photo of a rectangular shoe/cleat bag with rounded red piping edges and a red top handle, black fabric body with a subtle red diagonal streak and paint-splatter texture, club crest patch centered on the front panel (shield badge with a cartoon mascot: bald bearded man holding a beer mug and a skewer, red-and-white striped jersey background, banner with a founding date), large customizable jersey-style number '00' and 'SEU NOME' placeholder text printed below the crest in a distressed white sports typography, red zipper pull on top pocket, three-quarter angled product shot, centered composition, pure black background with a subtle dark red glow/vignette around the product, dramatic studio lighting, sharp focus, square 1:1 aspect ratio, no visible person, no watermark."
   },
 
@@ -177,6 +215,7 @@ const PRODUTOS = [
     imagem: "images/bolsa-mala.jpg",
     disponivel: true,
     temTamanho: false,
+    tamanhoFixo: "Único",
     temPersonalizacao: false
   },
 
@@ -193,6 +232,39 @@ const PRODUTOS = [
     imagem: "images/blusa.jpg",
     disponivel: true,
     temTamanho: true,
+    temPersonalizacao: false
+  },
+
+  {
+    id: "copo-termico",
+    numero: "09",
+    nome: "Copo Térmico Catados",
+    nomeFormulario: "Copo Térmico Catados",
+    descricao: "Aço inox, parede dupla, tampa com canudo. 590ml.",
+    preco: "R$ 65",
+    precoObs: "à vista/pix",
+    imagem: "images/copo-termico.jpg",
+    disponivel: true,
+    temTamanho: false,
+    temPersonalizacao: false,
+    cores: ["Preto", "Branco"],
+    imagensPorCor: {
+      "Preto": "images/copo-termico.jpg",
+      "Branco": "images/copo-termico-branco.jpg"
+    }
+  },
+
+  {
+    id: "chaveiro",
+    numero: "10",
+    nome: "Chaveiro Oficial Catados",
+    nomeFormulario: "Chaveiro Oficial Catados",
+    descricao: "Acrílico resistente, escudo Catados FCCA dos dois lados.",
+    preco: "R$ 4,99",
+    precoObs: "à vista/pix",
+    imagem: "images/chaveiro.jpg",
+    disponivel: true,
+    temTamanho: false,
     temPersonalizacao: false
   },
 

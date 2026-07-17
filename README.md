@@ -72,8 +72,12 @@ por produto.
    | `precoObs`       | Ex: `"à vista/pix"`. |
    | `imagem`         | Caminho da foto, ex: `"images/camisa-3-branca.jpg"`. |
    | `disponivel`     | `true` = à venda / `false` = aparece "Em breve", esmaecido, sem botão. |
-   | `temTamanho`     | `true` = mostra o seletor de Tamanho no card (roupas) / `false` = sem seletor (produto de tamanho único). |
-   | `temPersonalizacao` | `true` = mostra os campos de Nome e Número no card (hoje, só as camisas) / `false` = sem esses campos. |
+   | `temTamanho`     | `true` = mostra o seletor de Tamanho (editável) no card / `false` = sem seletor editável. |
+   | `tamanhoFixo`    | Opcional, só com `temTamanho: false`. Texto fixo desabilitado (ex: `"Único"`) mostrado no lugar do seletor — hoje usado em Boné, Bolsa/Mala e Porta Chuteira. |
+   | `temPersonalizacao` | `true` = mostra os campos de Nome e Número no card (hoje: camisas e porta-chuteira) / `false` = sem esses campos. |
+   | `personalizacaoObrigatoria` | Só importa com `temPersonalizacao: true`. `true` = Nome/Número obrigatórios pra adicionar ao pedido (hoje: as 4 camisas) / `false` = opcionais (hoje: Porta Chuteira). |
+   | `cores`          | Opcional — lista de cores, ex: `["Preto", "Branco"]`. Mostra um seletor de Cor no card. Omita se o produto não tem variação de cor. |
+   | `imagensPorCor`  | Opcional, junto com `cores`. Mapa de cor → foto, ex: `{"Preto": "images/x.jpg", "Branco": "images/x-branco.jpg"}`. Troca a foto do card ao mudar a cor. |
    | `promptImagem`   | Opcional — prompt de IA usado pra gerar a foto, só de referência. |
 
 4. Coloque o arquivo da foto dentro de `images/`.
