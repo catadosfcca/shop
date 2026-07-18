@@ -357,6 +357,12 @@ function atualizarInterfaceCarrinho() {
       : `<p class="carrinho-vazio">Seu pedido está vazio.<br>Adicione produtos do catálogo ao lado.</p>`;
   }
 
+  const totalValorEl = document.getElementById("carrinho-total-valor");
+  if (totalValorEl) {
+    const totais = calcularTotaisPedido(carrinho);
+    totalValorEl.textContent = `R$ ${formatarValorReais(totais.valor)}`;
+  }
+
   const btnFinalizar = document.getElementById("btn-finalizar");
   if (btnFinalizar) btnFinalizar.disabled = carrinho.length === 0;
 

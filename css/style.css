@@ -625,6 +625,25 @@ footer .rodape-crest{
   gap: 10px;
 }
 
+.carrinho-total{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 13px;
+  color: var(--cinza);
+  padding-bottom: 4px;
+}
+
+.carrinho-total strong{
+  font-family: var(--font-mono);
+  font-size: 20px;
+  color: var(--osso);
+  letter-spacing: 0;
+}
+
 .btn-limpar{
   background:none;
   border: 1px solid var(--preto-card-borda);
