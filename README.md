@@ -95,6 +95,42 @@ Edite os campos do produto correspondente em `js/produtos.js`.
 
 ---
 
+## Tabela de medidas das camisas
+
+Toda camisa (`temTamanho: true`) mostra um botão **"i"** ao lado de
+"Tamanho", que abre uma janela com a tabela de medidas — largura e
+altura em cm, mais o aviso de variação. É uma tabela **única,
+compartilhada por todas as camisas** (não por produto), pra não
+repetir a mesma informação em cada card.
+
+Pra mudar os tamanhos disponíveis ou as medidas, edite a constante
+`TABELA_MEDIDAS_CAMISAS` no topo de `js/produtos.js`:
+
+```js
+const TABELA_MEDIDAS_CAMISAS = [
+  { tamanho: "P",         largura: 47, altura: 61 },
+  { tamanho: "M",         largura: 50, altura: 63 },
+  { tamanho: "G",         largura: 53, altura: 65 },
+  { tamanho: "GG",        largura: 56, altura: 66 },
+  { tamanho: "EGG",       largura: 60, altura: 69 },
+  { tamanho: "Especial",  largura: 65, altura: 72 },
+  { tamanho: "Especial+", largura: 72, altura: 72 },
+];
+```
+
+Essa lista alimenta automaticamente **duas coisas ao mesmo tempo**:
+1. as opções do seletor "Tamanho" em toda camisa;
+2. as linhas da tabela do botão "i".
+
+Adicionar, remover ou renomear um tamanho aqui já atualiza os dois
+lugares — não precisa mexer em `index.html` nem em `site.js`.
+
+O texto de aviso ("As medidas podem variar até 2 cm.") fica na
+constante `MEDIDAS_OBSERVACAO`, logo abaixo da tabela no mesmo
+arquivo.
+
+---
+
 ## Como configurar o Google Forms (do zero)
 
 Como o carrinho já compila tudo num resumo de texto, o formulário

@@ -19,6 +19,8 @@
        - Para mudar cores/estilo                 -> css/style.css
        - O carrinho (botão flutuante + drawer + toast aqui embaixo)
          é controlado inteiramente por js/site.js.
+       - A tabela de medidas das camisas (modal aberto pelo botão "i")
+         vem de TABELA_MEDIDAS_CAMISAS em js/produtos.js.
 
        Veja README.md para o passo a passo completo.
        ============================================================ -->
@@ -75,6 +77,31 @@
       <button id="btn-finalizar" class="btn btn-finalizar" type="button">Finalizar pedido</button>
     </div>
   </aside>
+
+  <!-- Tabela de medidas das camisas: modal único, compartilhado por
+       todas as camisas (aberto pelo botão "i" ao lado de Tamanho) -->
+  <div id="medidas-overlay" class="carrinho-overlay"></div>
+  <div id="medidas-modal" class="medidas-modal" role="dialog" aria-label="Tabela de medidas das camisas">
+    <div class="carrinho-header">
+      <span>Tabela de medidas</span>
+      <button id="btn-fechar-medidas" type="button" aria-label="Fechar tabela de medidas">×</button>
+    </div>
+    <div class="medidas-corpo">
+      <table class="tabela-medidas">
+        <thead>
+          <tr>
+            <th>Tamanho</th>
+            <th>Largura (cm)</th>
+            <th>Altura (cm)</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-medidas-linhas">
+          <!-- Preenchido via JS a partir de TABELA_MEDIDAS_CAMISAS em produtos.js -->
+        </tbody>
+      </table>
+      <p id="medidas-observacao" class="medidas-obs"></p>
+    </div>
+  </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 

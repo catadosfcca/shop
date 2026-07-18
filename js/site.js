@@ -135,12 +135,14 @@ function criarCardHTML(produto) {
 
   const campoTamanho = produto.temTamanho ? `
     <div>
-      <label class="campo-label" for="tamanho-${produto.id}">Tamanho</label>
+      <label class="campo-label" for="tamanho-${produto.id}">
+        Tamanho
+        <button type="button" class="btn-info-tamanho" data-acao="abrir-medidas" aria-label="Ver tabela de medidas (largura e altura em cm)">i</button>
+      </label>
       <select class="select-tamanho" id="tamanho-${produto.id}" data-campo="tamanho">
-        <option value="P">P</option>
-        <option value="M" selected>M</option>
-        <option value="G">G</option>
-        <option value="GG">GG</option>
+        ${TABELA_MEDIDAS_CAMISAS.map((linha) =>
+          `<option value="${escapeHtml(linha.tamanho)}"${linha.tamanho === "M" ? " selected" : ""}>${escapeHtml(linha.tamanho)}</option>`
+        ).join("")}
       </select>
     </div>
   ` : (produto.tamanhoFixo ? `
@@ -260,6 +262,11 @@ function bindEventosGrid() {
     const acao = evento.target.getAttribute("data-acao");
     if (!acao) return;
 
+    if (acao === "abrir-medidas") {
+      abrirMedidas();
+      return;
+    }
+
     const article = evento.target.closest("article[data-produto-id]");
     if (!article) return;
 
@@ -367,6 +374,43 @@ function fecharCarrinho() {
   document.getElementById("carrinho-overlay")?.classList.remove("aberto");
 }
 
+/* ---------- MODAL: TABELA DE MEDIDAS DAS CAMISAS ---------- */
+
+function renderizarTabelaMedidas() {
+  const corpo = document.getElementById("tabela-medidas-linhas");
+  if (!corpo) return;
+
+  corpo.innerHTML = TABELA_MEDIDAS_CAMISAS.map((linha) => `
+    <tr>
+      <td>${escapeHtml(linha.tamanho)}</td>
+      <td>${linha.largura}</td>
+      <td>${linha.altura}</td>
+    </tr>
+  `).join("");
+
+  const obs = document.getElementById("medidas-observacao");
+  if (obs) obs.textContent = MEDIDAS_OBSERVACAO;
+}
+
+function abrirMedidas() {
+  document.getElementById("medidas-modal")?.classList.add("aberto");
+  document.getElementById("medidas-overlay")?.classList.add("aberto");
+}
+
+function fecharMedidas() {
+  document.getElementById("medidas-modal")?.classList.remove("aberto");
+  document.getElementById("medidas-overlay")?.classList.remove("aberto");
+}
+
+function bindEventosMedidas() {
+  document.getElementById("btn-fechar-medidas")?.addEventListener("click", fecharMedidas);
+  document.getElementById("medidas-overlay")?.addEventListener("click", fecharMedidas);
+
+  document.addEventListener("keydown", (evento) => {
+    if (evento.key === "Escape") fecharMedidas();
+  });
+}
+
 function bindEventosCarrinho() {
   document.getElementById("btn-carrinho")?.addEventListener("click", abrirCarrinho);
   document.getElementById("btn-fechar-carrinho")?.addEventListener("click", fecharCarrinho);
@@ -462,6 +506,8 @@ function inicializar() {
   bindEventosGrid();
   bindEventosCarrinho();
   atualizarInterfaceCarrinho();
+  renderizarTabelaMedidas();
+  bindEventosMedidas();
 }
 
 document.addEventListener("DOMContentLoaded", inicializar);

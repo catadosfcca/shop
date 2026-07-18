@@ -14,8 +14,29 @@
    `temTamanho` e `temPersonalizacao` controlam diretamente o que
    aparece no CARD DO SITE — não é mais preciso configurar seções
    nem navegação condicional no Forms. Veja README.md.
-   ============================================================
+   ============================================================ */
 
+/* ------------------------------------------------------------
+   TABELA DE MEDIDAS DAS CAMISAS — edite aqui pra mudar os
+   tamanhos disponíveis ou as medidas em cm. Essa lista alimenta:
+   1) as opções do seletor "Tamanho" em toda camisa (temTamanho: true)
+   2) a tabela do botão "ⓘ" (tabela de medidas) ao lado do seletor
+   Pra adicionar/remover um tamanho de todas as camisas de uma vez,
+   mexa só aqui — não precisa editar em cada produto.
+   ------------------------------------------------------------ */
+const TABELA_MEDIDAS_CAMISAS = [
+  { tamanho: "P",         largura: 47, altura: 61 },
+  { tamanho: "M",         largura: 50, altura: 63 },
+  { tamanho: "G",         largura: 53, altura: 65 },
+  { tamanho: "GG",        largura: 56, altura: 66 },
+  { tamanho: "EGG",       largura: 60, altura: 69 },
+  { tamanho: "Especial",  largura: 65, altura: 72 },
+  { tamanho: "Especial+", largura: 72, altura: 72 },
+];
+// Nota mostrada junto com a tabela no site:
+const MEDIDAS_OBSERVACAO = "As medidas podem variar até 2 cm.";
+
+/* ============================================================
    CAMPOS DE CADA PRODUTO:
 
    id              -> identificador único do produto (curto, sem espaço,
