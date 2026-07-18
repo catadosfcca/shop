@@ -200,7 +200,7 @@ const PRODUTOS = [
     temTamanho: false,
     tamanhoFixo: "Único",
     temPersonalizacao: true,
-    personalizacaoObrigatoria: false,
+    personalizacaoObrigatoria: true,
     promptImagem: "Product mockup photo of a rectangular shoe/cleat bag with rounded red piping edges and a red top handle, black fabric body with a subtle red diagonal streak and paint-splatter texture, club crest patch centered on the front panel (shield badge with a cartoon mascot: bald bearded man holding a beer mug and a skewer, red-and-white striped jersey background, banner with a founding date), large customizable jersey-style number '00' and 'SEU NOME' placeholder text printed below the crest in a distressed white sports typography, red zipper pull on top pocket, three-quarter angled product shot, centered composition, pure black background with a subtle dark red glow/vignette around the product, dramatic studio lighting, sharp focus, square 1:1 aspect ratio, no visible person, no watermark."
   },
 
@@ -230,7 +230,7 @@ const PRODUTOS = [
     preco: "R$ 99",
     precoObs: "à vista/pix",
     imagem: "images/blusa.jpg",
-    disponivel: true,
+    disponivel: false,
     temTamanho: true,
     temPersonalizacao: false
   },
@@ -259,7 +259,7 @@ const PRODUTOS = [
     numero: "10",
     nome: "Chaveiro Oficial Catados",
     nomeFormulario: "Chaveiro Oficial Catados",
-    descricao: "Acrílico resistente, escudo Catados FCCA dos dois lados.",
+    descricao: "Acrílico resistente, escudo Catados FCCA na frente.",
     preco: "R$ 4,99",
     precoObs: "à vista/pix",
     imagem: "images/chaveiro.jpg",
