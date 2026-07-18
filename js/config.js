@@ -36,5 +36,5 @@ const FORM_CONFIG = {
   // ID do campo "Valor Total (R$)" (resposta curta). Soma do
   // preço × quantidade de cada item, calculada automaticamente pelo
   // carrinho — numa coluna separada, já pronta pra somar na planilha.
-  FORM_ENTRY_VALOR_TOTAL: "",
+  FORM_ENTRY_VALOR_TOTAL: "1952627744",
 };
