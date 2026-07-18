@@ -164,7 +164,14 @@ fica simples — só 3 perguntas, sem seções, sem navegação condicional:
 
 7. Pronto. Teste no site: adicione 2 ou 3 produtos ao carrinho e
    clique em "Finalizar pedido" — deve abrir o Forms com o campo
-   "Resumo do Pedido" já preenchido com a listinha completa.
+   "Resumo do Pedido" já preenchido com a listinha completa, no
+   formato:
+   ```
+   Pedido Nº CTD-260718-A3F9
+
+   1) Camisa 2 Jogador Azul — ENERG Oficial | Qtd: 2 | Tamanho: G | Nome: JOAO | Número: 10
+   2) Boné Trucker — Catados Oficial | Qtd: 1
+   ```
 
 ### E se eu quiser manter uma pergunta "Produto" separada, tipo antes?
 
@@ -178,6 +185,65 @@ preencheria essa pergunta manualmente olhando o resumo. Pra maioria
 das lojas isso é redundante — o "Resumo do Pedido" já traz tudo — mas
 o campo `nomeFormulario` em `produtos.js` continua aí, com o texto
 certinho, caso você decida usar essa opção no futuro.
+
+---
+
+## Organizando os pedidos na planilha (Google Sheets)
+
+Cada envio do formulário vira **uma linha** na planilha de respostas
+— ou seja, cada linha já é o pedido completo de um cliente (mesmo
+que tenha vários produtos, tudo fica dentro da célula "Resumo do
+Pedido" daquela linha). O "Nº do Pedido" existe justamente pra você
+ter uma referência curta e única desse pedido, sem precisar abrir a
+célula inteira pra saber do que se trata.
+
+Por padrão, só o "Resumo do Pedido" existe no Forms (funciona sozinho
+— o número do pedido já vem escrito na primeira linha desse texto).
+Mas dá pra criar **3 colunas extras**, se preenchidas em
+`js/config.js`, que deixam a planilha muito mais fácil de organizar
+sem precisar abrir cada resposta:
+
+| Campo no Forms (resposta curta) | O que aparece | Pra que serve na planilha |
+|---|---|---|
+| **Nº do Pedido** | `CTD-260718-A3F9` | Filtrar/buscar um pedido específico, referenciar numa conversa de WhatsApp, evitar confundir dois pedidos do mesmo cliente. |
+| **Quantidade de Itens** | `5` | Ordenar por tamanho do pedido, somar total de peças vendidas no mês. |
+| **Valor Total (R$)** | `212,97` | Somar faturamento direto com `=SOMA()` na coluna, sem precisar calcular manualmente. |
+
+### Como adicionar essas colunas
+
+1. No Forms, crie 3 perguntas novas de **resposta curta**: "Nº do
+   Pedido", "Quantidade de Itens" e "Valor Total (R$)".
+2. Pra cada uma, repita o processo de pegar o ID do campo (passos 2 a
+   5 acima, usando essa pergunta em vez de "Resumo do Pedido").
+3. Cole os IDs em `js/config.js`:
+   ```js
+   FORM_ENTRY_NUMERO_PEDIDO: "123456789",
+   FORM_ENTRY_QTD_ITENS: "234567890",
+   FORM_ENTRY_VALOR_TOTAL: "345678901",
+   ```
+4. Pronto — o carrinho já calcula tudo sozinho (soma quantidade e
+   valor de todos os itens, gera o número do pedido) toda vez que o
+   comprador clica em "Finalizar pedido". Se deixar algum desses IDs
+   em branco, essa coluna simplesmente não é preenchida (não quebra
+   nada).
+
+### Dicas de organização na planilha
+
+- Congele a primeira linha (`Exibir → Congelar → 1 linha`) pra manter
+  os cabeçalhos visíveis ao rolar.
+- Use `Dados → Criar filtro` pra conseguir localizar rapidamente um
+  pedido por nome, WhatsApp ou Nº do Pedido.
+- Com a coluna "Valor Total" preenchida, uma célula qualquer com
+  `=SOMA(F:F)` (troque `F` pela coluna certa) já te dá o faturamento
+  total período — sem precisar abrir resposta por resposta.
+- Se quiser separar cada PRODUTO em uma linha própria (por exemplo,
+  pra saber quantas camisas tamanho G foram vendidas no total, e não
+  só o total de itens por pedido), isso exige um script (Google Apps
+  Script) que leia o "Resumo do Pedido" de cada linha e quebre em
+  linhas individuais numa aba separada — é mais trabalho de
+  configurar, mas é possível. Avise se quiser esse script também.
+
+---
 
 ---
 

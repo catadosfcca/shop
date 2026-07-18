@@ -438,26 +438,69 @@ function bindEventosCarrinho() {
 
 /* ---------- RESUMO DO PEDIDO E LINK DO FORMULÁRIO ---------- */
 
-function montarResumoPedido(carrinho) {
-  return carrinho.map((item, indice) => {
-    const linhas = [`${indice + 1}) ${item.nome} (Qtd: ${item.quantidade})`];
-    const detalhes = [];
+function gerarNumeroPedido() {
+  const agora = new Date();
+  const aa = String(agora.getFullYear()).slice(-2);
+  const mm = String(agora.getMonth() + 1).padStart(2, "0");
+  const dd = String(agora.getDate()).padStart(2, "0");
+  const aleatorio = Math.random().toString(36).slice(2, 6).toUpperCase();
+  return `CTD-${aa}${mm}${dd}-${aleatorio}`;
+}
+
+function converterPrecoParaNumero(precoTexto) {
+  // "R$ 99" -> 99 | "R$ 4,99" -> 4.99
+  const somenteNumeros = String(precoTexto).replace(/[^\d,.-]/g, "").replace(",", ".");
+  const valor = parseFloat(somenteNumeros);
+  return Number.isFinite(valor) ? valor : 0;
+}
+
+function calcularTotaisPedido(carrinho) {
+  return carrinho.reduce((totais, item) => {
+    const produto = PRODUTOS.find((p) => p.id === item.produtoId);
+    const precoUnitario = produto ? converterPrecoParaNumero(produto.preco) : 0;
+    totais.quantidade += item.quantidade;
+    totais.valor += precoUnitario * item.quantidade;
+    return totais;
+  }, { quantidade: 0, valor: 0 });
+}
+
+function formatarValorReais(valor) {
+  return valor.toFixed(2).replace(".", ",");
+}
+
+// Uma linha por item — mais fácil de ler dentro de uma célula da
+// planilha do que um item quebrado em várias linhas.
+function montarResumoPedido(carrinho, numeroPedido) {
+  const linhasItens = carrinho.map((item, indice) => {
+    const detalhes = [`Qtd: ${item.quantidade}`];
     if (item.cor) detalhes.push(`Cor: ${item.cor}`);
     if (item.tamanho) detalhes.push(`Tamanho: ${item.tamanho}`);
     if (item.nomePersonalizado) detalhes.push(`Nome: ${item.nomePersonalizado}`);
     if (item.numeroPersonalizado) detalhes.push(`Número: ${item.numeroPersonalizado}`);
-    if (detalhes.length) linhas.push(`   ${detalhes.join(" | ")}`);
-    return linhas.join("\n");
-  }).join("\n\n");
+    return `${indice + 1}) ${item.nome} | ${detalhes.join(" | ")}`;
+  });
+
+  return [`Pedido Nº ${numeroPedido}`, "", ...linhasItens].join("\n");
 }
 
-function montarLinkFormularioPedido(resumoTexto) {
+function montarLinkFormularioPedido(dados) {
   const base = FORM_CONFIG.FORM_BASE_URL;
   if (!base || base === "FORM_LINK_AQUI") return null;
 
   const params = new URLSearchParams();
   if (FORM_CONFIG.FORM_ENTRY_RESUMO) {
-    params.set(`entry.${FORM_CONFIG.FORM_ENTRY_RESUMO}`, resumoTexto);
+    params.set(`entry.${FORM_CONFIG.FORM_ENTRY_RESUMO}`, dados.resumo);
+  }
+  // Campos opcionais — só entram no link se o id estiver configurado
+  // em config.js (senão a coluna nem existe no Forms ainda).
+  if (FORM_CONFIG.FORM_ENTRY_NUMERO_PEDIDO) {
+    params.set(`entry.${FORM_CONFIG.FORM_ENTRY_NUMERO_PEDIDO}`, dados.numeroPedido);
+  }
+  if (FORM_CONFIG.FORM_ENTRY_QTD_ITENS) {
+    params.set(`entry.${FORM_CONFIG.FORM_ENTRY_QTD_ITENS}`, String(dados.quantidadeTotal));
+  }
+  if (FORM_CONFIG.FORM_ENTRY_VALOR_TOTAL) {
+    params.set(`entry.${FORM_CONFIG.FORM_ENTRY_VALOR_TOTAL}`, formatarValorReais(dados.valorTotal));
   }
 
   const separador = base.includes("?") ? "&" : "?";
@@ -473,8 +516,16 @@ function finalizarPedido() {
     return;
   }
 
-  const resumo = montarResumoPedido(carrinho);
-  const link = montarLinkFormularioPedido(resumo);
+  const numeroPedido = gerarNumeroPedido();
+  const totais = calcularTotaisPedido(carrinho);
+  const resumo = montarResumoPedido(carrinho, numeroPedido);
+
+  const link = montarLinkFormularioPedido({
+    resumo,
+    numeroPedido,
+    quantidadeTotal: totais.quantidade,
+    valorTotal: totais.valor,
+  });
 
   if (!link) {
     mostrarToast("Formulário ainda não configurado — veja README.md");
@@ -482,6 +533,7 @@ function finalizarPedido() {
   }
 
   window.open(link, "_blank", "noopener");
+  mostrarToast(`Pedido ${numeroPedido} — finalize no formulário que abriu`);
 }
 
 /* ---------- TOAST (feedback rápido) ---------- */
