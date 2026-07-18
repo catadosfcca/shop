@@ -650,6 +650,99 @@ footer .rodape-crest{
   pointer-events:none;
 }
 
+/* ---------- BOTÃO "i" (TABELA DE MEDIDAS) ---------- */
+.btn-info-tamanho{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:15px; height:15px;
+  margin-left:6px;
+  border-radius:50%;
+  border: 1px solid var(--cinza);
+  background:none;
+  color: var(--cinza);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-style: italic;
+  line-height:1;
+  cursor:pointer;
+  vertical-align:middle;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-info-tamanho:hover{
+  border-color: var(--vermelho);
+  color: var(--osso);
+}
+
+/* ---------- MODAL: TABELA DE MEDIDAS ---------- */
+.medidas-modal{
+  position:fixed;
+  top:50%; left:50%;
+  transform: translate(-50%, -50%) scale(0.96);
+  width:420px;
+  max-width:92vw;
+  max-height:80vh;
+  background: var(--preto-card);
+  border: 1px solid var(--preto-card-borda);
+  border-radius: 8px;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  opacity:0;
+  pointer-events:none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index:55;
+}
+
+.medidas-modal.aberto{
+  opacity:1;
+  pointer-events:auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.medidas-corpo{
+  padding: 18px 20px 20px;
+  overflow-y:auto;
+}
+
+.tabela-medidas{
+  width:100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.tabela-medidas th{
+  text-align:left;
+  color: var(--cinza);
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+  font-size:10px;
+  padding-bottom:8px;
+  border-bottom:1px solid var(--preto-card-borda);
+}
+
+.tabela-medidas td{
+  padding:8px 4px;
+  border-bottom:1px solid var(--preto-card-borda);
+  color: var(--osso);
+}
+
+.tabela-medidas th:not(:first-child),
+.tabela-medidas td:not(:first-child){
+  text-align:center;
+}
+
+.tabela-medidas tr:last-child td{ border-bottom:none; }
+
+.medidas-obs{
+  margin-top:14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--cinza);
+}
+
 /* ---------- TOAST ---------- */
 .toast{
   position:fixed;
