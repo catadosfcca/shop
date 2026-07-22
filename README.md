@@ -78,6 +78,7 @@ por produto.
    | `personalizacaoObrigatoria` | Só importa com `temPersonalizacao: true`. `true` = Nome/Número obrigatórios pra adicionar ao pedido (hoje: as 4 camisas) / `false` = opcionais (hoje: Porta Chuteira). |
    | `cores`          | Opcional — lista de cores, ex: `["Preto", "Branco"]`. Mostra um seletor de Cor no card. Omita se o produto não tem variação de cor. |
    | `imagensPorCor`  | Opcional, junto com `cores`. Mapa de cor → foto, ex: `{"Preto": "images/x.jpg", "Branco": "images/x-branco.jpg"}`. Troca a foto do card ao mudar a cor. |
+   | `variantes`      | Opcional — use no lugar de `temTamanho`/`tamanhoFixo` quando o **tamanho muda o preço** (ex: Símbolo Decorativo). Lista de `{ label, preco }`. O preço exibido e o valor do pedido mudam sozinhos conforme a escolha. Não combine com `temTamanho`/`tamanhoFixo` no mesmo produto. |
    | `promptImagem`   | Opcional — prompt de IA usado pra gerar a foto, só de referência. |
 
 4. Coloque o arquivo da foto dentro de `images/`.

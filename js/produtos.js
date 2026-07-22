@@ -116,6 +116,27 @@ const MEDIDAS_OBSERVACAO = "As medidas podem variar até 2 cm.";
                        junto. Se uma cor não tiver entrada nesse mapa,
                        usa a foto padrão do campo "imagem".
 
+   variantes       -> (opcional) use em vez de temTamanho/tamanhoFixo
+                       quando o TAMANHO MUDA O PREÇO (ex: Símbolo
+                       Decorativo, que custa mais caro no tamanho
+                       maior). Lista de { label, preco }, ex:
+                       [
+                         { label: "10x10cm", preco: 30 },
+                         { label: "15x15cm", preco: 50 },
+                         { label: "20x20cm", preco: 70 },
+                       ]
+                       Mostra um seletor de Tamanho no card (igual ao
+                       temTamanho normal), mas cada opção já mostra o
+                       preço dela, e o preço exibido no card + o valor
+                       lançado no pedido mudam sozinhos conforme a
+                       escolha. O campo "preco" do produto (abaixo)
+                       ainda precisa ser preenchido — use o valor da
+                       PRIMEIRA opção da lista, é o que aparece antes
+                       do comprador escolher.
+                       Não combine variantes com temTamanho:true nem
+                       com tamanhoFixo no mesmo produto — use só um
+                       dos três.
+
    promptImagem    -> (opcional) o prompt usado para gerar a foto do
                        produto em IA, guardado aqui só de referência,
                        caso precise gerar uma variação no futuro. Pode
@@ -287,6 +308,40 @@ const PRODUTOS = [
     disponivel: true,
     temTamanho: false,
     temPersonalizacao: false
+  },
+
+  {
+    id: "lanterna-simbolo",
+    numero: "11",
+    nome: "Lanterna 3D Símbolo Catados Oficial",
+    nomeFormulario: "Lanterna 3D Símbolo Catados Oficial",
+    descricao: "Luminária de LED com o escudo do Catados FCCA em acrílico 3D.",
+    preco: "R$ 99",
+    precoObs: "à vista/pix",
+    imagem: "images/lanterna-simbolo.jpg",
+    disponivel: true,
+    temTamanho: false,
+    tamanhoFixo: "Único",
+    temPersonalizacao: false
+  },
+
+  {
+    id: "simbolo-decorativo",
+    numero: "12",
+    nome: "Símbolo Decorativo 3D Catados Oficial",
+    nomeFormulario: "Símbolo Decorativo 3D Catados Oficial",
+    descricao: "Escudo decorativo em relevo 3D, acabamento emborrachado.",
+    preco: "R$ 30",
+    precoObs: "à vista/pix",
+    imagem: "images/simbolo-decorativo.jpg",
+    disponivel: true,
+    temTamanho: false,
+    temPersonalizacao: false,
+    variantes: [
+      { label: "10x10cm", preco: 30 },
+      { label: "15x15cm", preco: 50 },
+      { label: "20x20cm", preco: 70 },
+    ]
   },
 
 ];

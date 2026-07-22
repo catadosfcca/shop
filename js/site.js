@@ -58,6 +58,10 @@ function adicionarAoCarrinho(produto, campos) {
   if (existente) {
     existente.quantidade += campos.quantidade;
   } else {
+    const precoUnitario = (typeof campos.precoVariante === "number" && !isNaN(campos.precoVariante))
+      ? campos.precoVariante
+      : converterPrecoParaNumero(produto.preco);
+
     carrinho.push({
       itemId: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       produtoId: produto.id,
@@ -68,6 +72,7 @@ function adicionarAoCarrinho(produto, campos) {
       nomePersonalizado: campos.nome || "",
       numeroPersonalizado: campos.numero || "",
       quantidade: campos.quantidade,
+      precoUnitario,
     });
   }
 
@@ -114,7 +119,7 @@ function criarCardHTML(produto) {
           <div class="card-nome">${escapeHtml(produto.nome)}</div>
           <div class="card-desc">${escapeHtml(produto.descricao)}</div>
           <div class="card-rodape">
-            <div class="preco">${escapeHtml(produto.preco)}<span>${escapeHtml(produto.precoObs)}</span></div>
+            <div class="preco"><span class="preco-valor">${escapeHtml(produto.preco)}</span><span class="preco-obs">${escapeHtml(produto.precoObs)}</span></div>
             <span class="btn desabilitado" aria-disabled="true">Indisponível</span>
           </div>
         </div>
@@ -152,7 +157,16 @@ function criarCardHTML(produto) {
         <option value="${escapeHtml(produto.tamanhoFixo)}" selected>${escapeHtml(produto.tamanhoFixo)}</option>
       </select>
     </div>
-  ` : "");
+  ` : (produto.variantes && produto.variantes.length ? `
+    <div>
+      <label class="campo-label" for="tamanho-${produto.id}">Tamanho</label>
+      <select class="select-tamanho" id="tamanho-${produto.id}" data-campo="tamanho">
+        ${produto.variantes.map((variante, indice) =>
+          `<option value="${escapeHtml(variante.label)}" data-preco="${variante.preco}"${indice === 0 ? " selected" : ""}>${escapeHtml(variante.label)} — ${escapeHtml(formatarPrecoCurto(variante.preco))}</option>`
+        ).join("")}
+      </select>
+    </div>
+  ` : ""));
 
   const nomeObrigatorio = produto.temPersonalizacao && produto.personalizacaoObrigatoria;
 
@@ -190,7 +204,7 @@ function criarCardHTML(produto) {
         ${opcoes}
 
         <div class="card-rodape">
-          <div class="preco">${escapeHtml(produto.preco)}<span>${escapeHtml(produto.precoObs)}</span></div>
+          <div class="preco"><span class="preco-valor" data-campo-preco>${escapeHtml(produto.preco)}</span><span class="preco-obs">${escapeHtml(produto.precoObs)}</span></div>
           <div class="qtd-stepper">
             <button type="button" data-acao="menos" aria-label="Diminuir quantidade">−</button>
             <span data-campo="qtd-valor">1</span>
@@ -211,13 +225,19 @@ function renderizarCatalogo() {
 }
 
 function lerCamposCard(article) {
-  const campos = { cor: "", tamanho: "", nome: "", numero: "", quantidade: 1 };
+  const campos = { cor: "", tamanho: "", precoVariante: null, nome: "", numero: "", quantidade: 1 };
 
   const corEl = article.querySelector('[data-campo="cor"]');
   if (corEl) campos.cor = corEl.value;
 
   const tamanhoEl = article.querySelector('[data-campo="tamanho"]');
-  if (tamanhoEl) campos.tamanho = tamanhoEl.value;
+  if (tamanhoEl) {
+    campos.tamanho = tamanhoEl.value;
+    const opcaoSelecionada = tamanhoEl.selectedOptions && tamanhoEl.selectedOptions[0];
+    if (opcaoSelecionada && opcaoSelecionada.dataset.preco) {
+      campos.precoVariante = parseFloat(opcaoSelecionada.dataset.preco);
+    }
+  }
 
   const nomeEl = article.querySelector('[data-campo="nome"]');
   if (nomeEl) campos.nome = nomeEl.value.trim();
@@ -298,8 +318,12 @@ function bindEventosGrid() {
   });
 
   // Troca a foto do card quando o comprador muda a cor selecionada.
+  // Troca a foto do card quando o comprador muda a cor selecionada, e
+  // atualiza o preço exibido quando o tamanho escolhido tem preço
+  // próprio (produto.variantes).
   grid.addEventListener("change", (evento) => {
-    if (evento.target.getAttribute("data-campo") !== "cor") return;
+    const campo = evento.target.getAttribute("data-campo");
+    if (campo !== "cor" && campo !== "tamanho") return;
 
     const article = evento.target.closest("article[data-produto-id]");
     if (!article) return;
@@ -307,8 +331,20 @@ function bindEventosGrid() {
     const produto = PRODUTOS.find((p) => p.id === article.getAttribute("data-produto-id"));
     if (!produto) return;
 
-    const foto = article.querySelector(".card-foto");
-    if (foto) foto.src = obterImagemParaCor(produto, evento.target.value);
+    if (campo === "cor") {
+      const foto = article.querySelector(".card-foto");
+      if (foto) foto.src = obterImagemParaCor(produto, evento.target.value);
+      return;
+    }
+
+    // campo === "tamanho": só atualiza o preço se a opção escolhida
+    // tiver um preço próprio (data-preco), ou seja, só em produtos
+    // com "variantes" — tamanhos normais de camisa não mexem no preço.
+    const opcaoSelecionada = evento.target.selectedOptions && evento.target.selectedOptions[0];
+    if (!opcaoSelecionada || !opcaoSelecionada.dataset.preco) return;
+
+    const precoEl = article.querySelector("[data-campo-preco]");
+    if (precoEl) precoEl.textContent = formatarPrecoCurto(parseFloat(opcaoSelecionada.dataset.preco));
   });
 }
 
@@ -462,8 +498,15 @@ function converterPrecoParaNumero(precoTexto) {
 
 function calcularTotaisPedido(carrinho) {
   return carrinho.reduce((totais, item) => {
-    const produto = PRODUTOS.find((p) => p.id === item.produtoId);
-    const precoUnitario = produto ? converterPrecoParaNumero(produto.preco) : 0;
+    // Prioriza o preço salvo no próprio item (guardado no momento em
+    // que foi adicionado — importante pra produtos com variantes de
+    // preço, como o Símbolo Decorativo). Carrinhos salvos antes dessa
+    // mudança não têm precoUnitario ainda, daí o fallback abaixo.
+    let precoUnitario = item.precoUnitario;
+    if (typeof precoUnitario !== "number" || isNaN(precoUnitario)) {
+      const produto = PRODUTOS.find((p) => p.id === item.produtoId);
+      precoUnitario = produto ? converterPrecoParaNumero(produto.preco) : 0;
+    }
     totais.quantidade += item.quantidade;
     totais.valor += precoUnitario * item.quantidade;
     return totais;
@@ -472,6 +515,12 @@ function calcularTotaisPedido(carrinho) {
 
 function formatarValorReais(valor) {
   return valor.toFixed(2).replace(".", ",");
+}
+
+// Formato curto pra mostrar preço de variante: "R$ 30" (sem decimais
+// quando é redondo) ou "R$ 30,50" (com decimais quando precisa).
+function formatarPrecoCurto(valor) {
+  return Number.isInteger(valor) ? `R$ ${valor}` : `R$ ${formatarValorReais(valor)}`;
 }
 
 // Uma linha por item — mais fácil de ler dentro de uma célula da
@@ -540,6 +589,9 @@ function finalizarPedido() {
 
   window.open(link, "_blank", "noopener");
   mostrarToast(`Pedido ${numeroPedido} — finalize no formulário que abriu`);
+
+  limparCarrinho();
+  fecharCarrinho();
 }
 
 /* ---------- TOAST (feedback rápido) ---------- */
